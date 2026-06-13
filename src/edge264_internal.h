@@ -7,19 +7,24 @@
 
 #include <assert.h>
 #include <limits.h>
-#include <pthread.h>
+#ifndef DOS_CORE
+	#include <pthread.h>
+#endif
 #include <stddef.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <errno.h>
 #include <time.h>
 #ifdef _WIN32
 	#include <processthreadsapi.h>
 	#define ssize_t ptrdiff_t
 #else
-	#include <unistd.h>
-	#include <sys/resource.h>
+	#ifndef DOS_CORE
+		#include <unistd.h>
+		#include <sys/resource.h>
+	#endif
 #endif
 
 // Automatic selection of SIMD backend if not defined by environment

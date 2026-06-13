@@ -165,6 +165,7 @@ Edge264Decoder *edge264_alloc(int n_threads, Edge264LogCb log_cb, void *log_arg,
 	dec->parse_nal_unit[8] = ADD_VARIANT(parse_pic_parameter_set);
 	dec->parse_nal_unit[10] = parse_end_of_sequence;
 	dec->parse_nal_unit[14] = dec->parse_nal_unit[20] = ADD_VARIANT(parse_nal_unit_header_extension);
+#ifndef DOS_CORE
 	#if defined(HAS_X86_64_V2) || defined(HAS_X86_64_V3)
 		__builtin_cpu_init();
 	#endif
@@ -197,6 +198,7 @@ Edge264Decoder *edge264_alloc(int n_threads, Edge264LogCb log_cb, void *log_arg,
 			dec->parse_nal_unit[14] = dec->parse_nal_unit[20] = parse_nal_unit_header_extension_v3;
 		}
 	#endif
+#endif
 	#ifdef HAS_LOGS
 		if (log_cb) {
 			for (int i = 0; i < 32; i++)
@@ -336,7 +338,7 @@ int edge264_decode_NAL(Edge264Decoder *dec, const uint8_t *buf, const uint8_t *e
 			pthread_mutex_unlock(&dec->lock);
 		return ENOBUFS;
 	}
-	
+		
 	// bump all frames at the end of buffer
 	if (__builtin_expect(buf >= end, 0)) {
 		int ret = bump_all_frames(dec);
@@ -344,6 +346,7 @@ int edge264_decode_NAL(Edge264Decoder *dec, const uint8_t *buf, const uint8_t *e
 			pthread_mutex_unlock(&dec->lock);
 		return ret ?: ENODATA;
 	}
+	
 	
 	// prefill the bitstream cache while parsing the NAL byte header
 	dec->gb.CPB = buf;
@@ -354,6 +357,7 @@ int edge264_decode_NAL(Edge264Decoder *dec, const uint8_t *buf, const uint8_t *e
 	dec->nal_unit_type = dec->gb.msb_cache >> (SIZE_BIT - 8) & 0x1f;
 	dec->gb.msb_cache = dec->gb.msb_cache << 8 | 1 << 7;
 	refill(&dec->gb, 0);
+		
 	Parser parser = dec->parse_nal_unit[dec->nal_unit_type];
 	if (dec->log_cb) {
 		dec->log_pos = snprintf(dec->log_buf, sizeof(dec->log_buf),
@@ -362,6 +366,7 @@ int edge264_decode_NAL(Edge264Decoder *dec, const uint8_t *buf, const uint8_t *e
 			dec->nal_ref_idc,
 			dec->nal_unit_type, nal_unit_type_names[dec->nal_unit_type], unsup_if(!parser));
 	}
+	
 	int ret = parser(dec, unref_cb, unref_arg);
 	// printf("nal_unit_type=%d, ret=%d\n\n", dec->nal_unit_type, ret);
 	
