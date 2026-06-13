@@ -1,0 +1,1083 @@
+i586-pc-msdosdjgpp-gcc -O3 -Wall -Wextra -I../include -march=i586 -msse -msse2 -msse3 -mfpmath=sse -ffast-math -ftree-vectorize -flax-vector-conversions -DDOS_CORE -std=gnu11 -I../2core264 -c ../src/edge264.c -o edge264.o
+In file included from ../src/edge264.c:81:
+../src/edge264_internal.h:382:9: error: unknown type name 'pthread_t'
+  382 |         pthread_t threads[16];
+      |         ^~~~~~~~~
+../src/edge264_internal.h:383:9: error: unknown type name 'pthread_mutex_t'
+  383 |         pthread_mutex_t lock;
+      |         ^~~~~~~~~~~~~~~
+../src/edge264_internal.h:384:9: error: unknown type name 'pthread_cond_t'
+  384 |         pthread_cond_t task_ready;
+      |         ^~~~~~~~~~~~~~
+../src/edge264_internal.h:385:9: error: unknown type name 'pthread_cond_t'
+  385 |         pthread_cond_t task_progress; // signals next_deblock_addr has been updated
+      |         ^~~~~~~~~~~~~~
+../src/edge264_internal.h:386:9: error: unknown type name 'pthread_cond_t'
+  386 |         pthread_cond_t task_complete;
+      |         ^~~~~~~~~~~~~~
+../src/edge264_internal.h: In function 'ifelse_mask':
+../src/edge264_internal.h:779:94: warning: suggest parentheses around arithmetic in operand of '|' [-Wparentheses]
+  779 |                 static always_inline i8x16 ifelse_mask(i8x16 v, i8x16 t, i8x16 f) { return t & v | f & ~v; }
+      |                                                                                            ~~^~~
+../src/edge264_internal.h: In function 'ifelse_msb':
+../src/edge264_internal.h:780:112: warning: suggest parentheses around arithmetic in operand of '|' [-Wparentheses]
+  780 |                 static always_inline i8x16 ifelse_msb(i8x16 v, i8x16 t, i8x16 f) { i8x16 m = (v < 0); return t & m | f & ~m; }
+      |                                                                                                              ~~^~~
+../src/edge264_internal.h: In function 'min8':
+../src/edge264_internal.h:781:95: warning: suggest parentheses around arithmetic in operand of '|' [-Wparentheses]
+  781 |                 static always_inline i8x16 min8(i8x16 a, i8x16 b) { i8x16 v = b > a; return a & v | b & ~v; }
+      |                                                                                             ~~^~~
+../src/edge264_internal.h: In function 'max8':
+../src/edge264_internal.h:782:95: warning: suggest parentheses around arithmetic in operand of '|' [-Wparentheses]
+  782 |                 static always_inline i8x16 max8(i8x16 a, i8x16 b) { i8x16 v = a > b; return a & v | b & ~v; }
+      |                                                                                             ~~^~~
+../src/edge264_internal.h: In function 'minw32':
+../src/edge264_internal.h:783:110: warning: suggest parentheses around arithmetic in operand of '|' [-Wparentheses]
+  783 |                 static always_inline u32x4 minw32(u32x4 a, u32x4 b) { i32x4 v = (i32x4)(a - b) < 0; return a & v | b & ~v; }
+      |                                                                                                            ~~^~~
+../src/edge264_internal.h: In function 'rbsp_end':
+../src/edge264_internal.h:1136:38: warning: comparison of integer expressions of different signedness: 'unsigned int' and 'int' [-Wsign-compare]
+ 1136 |                (unsigned)bits_to_end <= 7 * trailing_bit;
+      |                                      ^~
+../src/edge264_internal.h: In function 'get_relative_time_us':
+../src/edge264_internal.h:1203:17: error: implicit declaration of function 'clock_gettime' [-Wimplicit-function-declaration]
+ 1203 |                 clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &tp);
+      |                 ^~~~~~~~~~~~~
+../src/edge264_internal.h:1203:31: error: 'CLOCK_PROCESS_CPUTIME_ID' undeclared (first use in this function)
+ 1203 |                 clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &tp);
+      |                               ^~~~~~~~~~~~~~~~~~~~~~~~
+../src/edge264_internal.h:1203:31: note: each undeclared identifier is reported only once for each function it appears in
+../src/edge264_internal.h: In function 'ret_to_str':
+../src/edge264_internal.h:1215:30: error: 'ENOBUFS' undeclared (first use in this function); did you mean 'EROFS'?
+ 1215 |         i8x16 retcodes = {0, ENOBUFS, ENOTSUP, EBADMSG, EINVAL, ENODATA, ENOMEM, ENOMSG};
+      |                              ^~~~~~~
+      |                              EROFS
+../src/edge264_internal.h:1215:39: error: 'ENOTSUP' undeclared (first use in this function)
+ 1215 |         i8x16 retcodes = {0, ENOBUFS, ENOTSUP, EBADMSG, EINVAL, ENODATA, ENOMEM, ENOMSG};
+      |                                       ^~~~~~~
+../src/edge264_internal.h:1215:48: error: 'EBADMSG' undeclared (first use in this function); did you mean 'EBADF'?
+ 1215 |         i8x16 retcodes = {0, ENOBUFS, ENOTSUP, EBADMSG, EINVAL, ENODATA, ENOMEM, ENOMSG};
+      |                                                ^~~~~~~
+      |                                                EBADF
+../src/edge264_internal.h:1215:65: error: 'ENODATA' undeclared (first use in this function)
+ 1215 |         i8x16 retcodes = {0, ENOBUFS, ENOTSUP, EBADMSG, EINVAL, ENODATA, ENOMEM, ENOMSG};
+      |                                                                 ^~~~~~~
+../src/edge264_internal.h:1215:82: error: 'ENOMSG' undeclared (first use in this function); did you mean 'ENOMEM'?
+ 1215 |         i8x16 retcodes = {0, ENOBUFS, ENOTSUP, EBADMSG, EINVAL, ENODATA, ENOMEM, ENOMSG};
+      |                                                                                  ^~~~~~
+      |                                                                                  ENOMEM
+In file included from ../src/edge264_headers.c:4,
+                 from ../src/edge264.c:83:
+../src/edge264_deblock.c: In function 'deblock_Y_8bit':
+../src/edge264_deblock.c:225:87: warning: comparison between types '__vector(16) unsigned char' and 'i8x16' {aka '__vector(16) signed char'} [-Wsign-compare]
+  225 |                 i8x16 condp = (subsu8(subsu8(p2, p0) | subsu8(p0, p2), bm1) | condpq) == zero;\
+      |                                                                                       ^~
+../src/edge264_deblock.c:617:25: note: in expansion of macro 'DEBLOCK_LUMA_HARD'
+  617 |                         DEBLOCK_LUMA_HARD(vW, vX, vY, vZ, v0, v1, v2, v3, ctx->alpha[8], ctx->beta[8]);
+      |                         ^~~~~~~~~~~~~~~~~
+../src/edge264_deblock.c:226:87: warning: comparison between types '__vector(16) unsigned char' and 'i8x16' {aka '__vector(16) signed char'} [-Wsign-compare]
+  226 |                 i8x16 condq = (subsu8(subsu8(q2, q0) | subsu8(q0, q2), bm1) | condpq) == zero;\
+      |                                                                                       ^~
+../src/edge264_deblock.c:617:25: note: in expansion of macro 'DEBLOCK_LUMA_HARD'
+  617 |                         DEBLOCK_LUMA_HARD(vW, vX, vY, vZ, v0, v1, v2, v3, ctx->alpha[8], ctx->beta[8]);
+      |                         ^~~~~~~~~~~~~~~~~
+../src/edge264_deblock.c:225:87: warning: comparison between types '__vector(16) unsigned char' and 'i8x16' {aka '__vector(16) signed char'} [-Wsign-compare]
+  225 |                 i8x16 condp = (subsu8(subsu8(p2, p0) | subsu8(p0, p2), bm1) | condpq) == zero;\
+      |                                                                                       ^~
+../src/edge264_deblock.c:817:25: note: in expansion of macro 'DEBLOCK_LUMA_HARD'
+  817 |                         DEBLOCK_LUMA_HARD(hw, hx, hy, hz, h0, h1, h2, h3, ctx->alpha[12], ctx->beta[12]);
+      |                         ^~~~~~~~~~~~~~~~~
+../src/edge264_deblock.c:226:87: warning: comparison between types '__vector(16) unsigned char' and 'i8x16' {aka '__vector(16) signed char'} [-Wsign-compare]
+  226 |                 i8x16 condq = (subsu8(subsu8(q2, q0) | subsu8(q0, q2), bm1) | condpq) == zero;\
+      |                                                                                       ^~
+../src/edge264_deblock.c:817:25: note: in expansion of macro 'DEBLOCK_LUMA_HARD'
+  817 |                         DEBLOCK_LUMA_HARD(hw, hx, hy, hz, h0, h1, h2, h3, ctx->alpha[12], ctx->beta[12]);
+      |                         ^~~~~~~~~~~~~~~~~
+../src/edge264_deblock.c: In function 'deblock_mb':
+../src/edge264_deblock.c:930:17: warning: missing braces around initializer [-Wmissing-braces]
+  930 |                 {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 4, 5, 6, 7, 8, 9, 10, 12, 13, 15, 17, 20, 22, 25, 28, 32, 36, 40, 45, 50, 56, 63, 71, 80, 90, 101, 113, 127, 144, 162, 182, 203, 226, 255, 255};
+      |                 ^
+      |                  {                                             } {                                                          } {                                                                       }
+../src/edge264_deblock.c:932:17: warning: missing braces around initializer [-Wmissing-braces]
+  932 |                 {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 3, 3, 3, 3, 4, 4, 4, 6, 6, 7, 7, 8, 8, 9, 9, 10, 10, 11, 11, 12, 12, 13, 13, 14, 14, 15, 15, 16, 16, 17, 17, 18, 18};
+      |                 ^
+      |                  {                                             } {                                               } {                                                             }
+../src/edge264_deblock.c:933:44: warning: missing braces around initializer [-Wmissing-braces]
+  933 |         static const i8x16 idx2tC0[3][3] = { // modified to disable deblocking when alpha or beta is zero
+      |                                            ^
+  934 |                 {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 6, 6, 7, 8, 9, 10, 11, 13},
+      |                  {                                                         } {                                             } {                                                }
+../src/edge264_deblock.c:933:44: warning: missing braces around initializer [-Wmissing-braces]
+  933 |         static const i8x16 idx2tC0[3][3] = { // modified to disable deblocking when alpha or beta is zero
+      |                                            ^
+  934 |                 {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 6, 6, 7, 8, 9, 10, 11, 13},
+      |                  {                                                         } {                                             } {                                                }
+  935 |                 {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 4, 4, 5, 5, 6, 7, 8, 8, 10, 11, 12, 13, 15, 17},
+      |                  {                                                         } {                                             } {                                                   }
+../src/edge264_deblock.c:933:44: warning: missing braces around initializer [-Wmissing-braces]
+  933 |         static const i8x16 idx2tC0[3][3] = { // modified to disable deblocking when alpha or beta is zero
+      |                                            ^
+  934 |                 {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 6, 6, 7, 8, 9, 10, 11, 13},
+      |                  {                                                         } {                                             } {                                                }
+  935 |                 {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 4, 4, 5, 5, 6, 7, 8, 8, 10, 11, 12, 13, 15, 17},
+      |                  {                                                         } {                                             } {                                                   }
+  936 |                 {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 6, 6, 7, 8, 9, 10, 11, 13, 14, 16, 18, 20, 23, 25},
+      |                  {                                                         } {                                             } {                                                      }
+../src/edge264_deblock.c:933:44: warning: missing braces around initializer [-Wmissing-braces]
+  933 |         static const i8x16 idx2tC0[3][3] = { // modified to disable deblocking when alpha or beta is zero
+      |                                            ^
+  934 |                 {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 6, 6, 7, 8, 9, 10, 11, 13},
+      |                  {                                                         } {                                             } {                                                }
+  935 |                 {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 4, 4, 5, 5, 6, 7, 8, 8, 10, 11, 12, 13, 15, 17},
+      |                  {                                                         } {                                             } {                                                   }
+  936 |                 {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 6, 6, 7, 8, 9, 10, 11, 13, 14, 16, 18, 20, 23, 25},
+      |                  {                                                         } {                                             } {                                                      }
+In file included from ../src/edge264_headers.c:5:
+../src/edge264_inter.c: In function 'maddshrL':
+../src/edge264_inter.c:17:78: warning: unused parameter '_' [-Wunused-parameter]
+   17 |         static always_inline u8x16 maddshrL(u8x16 q, u8x16 p, i8x16 w, i8x16 _, i16x8 o, i64x2 wd) {
+      |                                                                        ~~~~~~^
+../src/edge264_inter.c: In function 'maddshrC16':
+../src/edge264_inter.c:22:93: warning: unused parameter '_' [-Wunused-parameter]
+   22 |         static always_inline u8x16 maddshrC16(u8x16 q, u8x16 p, i8x16 wCb, i8x16 wCr, i8x16 _, i8x16 __, i16x8 oCb, i16x8 oCr, i64x2 wd) {
+      |                                                                                       ~~~~~~^
+../src/edge264_inter.c:22:102: warning: unused parameter '__' [-Wunused-parameter]
+   22 |         static always_inline u8x16 maddshrC16(u8x16 q, u8x16 p, i8x16 wCb, i8x16 wCr, i8x16 _, i8x16 __, i16x8 oCb, i16x8 oCr, i64x2 wd) {
+      |                                                                                                ~~~~~~^~
+../src/edge264_inter.c: In function 'maddshrC8':
+../src/edge264_inter.c:27:79: warning: unused parameter '_' [-Wunused-parameter]
+   27 |         static always_inline u8x16 maddshrC8(u8x16 q, u8x16 p, i8x16 w, i8x16 _, i16x8 o, i64x2 wd) {
+      |                                                                         ~~~~~~^
+../src/edge264_inter.c: In function 'maddshrC4':
+../src/edge264_inter.c:32:79: warning: unused parameter '_' [-Wunused-parameter]
+   32 |         static always_inline i8x16 maddshrC4(u8x16 q, u8x16 p, i8x16 w, i8x16 _, i16x8 o, i64x2 wd) {
+      |                                                                         ~~~~~~^
+../src/edge264_inter.c: In function 'decode_inter':
+../src/edge264_inter.c:3:35: warning: suggest parentheses around arithmetic in operand of '|' [-Wparentheses]
+    3 | #define pack_w(w0, w1) ((w1) << 8 | (w0) & 255)
+      |                                   ^
+../src/edge264_inter.c:1137:22: note: in expansion of macro 'pack_w'
+ 1137 |         i16x8 wod = {pack_w(0, 1), 0, 0, 0, pack_w(0, 1), pack_w(0, 1), 0, 0}; // no_weight
+      |                      ^~~~~~
+../src/edge264_inter.c:3:35: warning: suggest parentheses around arithmetic in operand of '|' [-Wparentheses]
+    3 | #define pack_w(w0, w1) ((w1) << 8 | (w0) & 255)
+      |                                   ^
+../src/edge264_inter.c:1137:45: note: in expansion of macro 'pack_w'
+ 1137 |         i16x8 wod = {pack_w(0, 1), 0, 0, 0, pack_w(0, 1), pack_w(0, 1), 0, 0}; // no_weight
+      |                                             ^~~~~~
+../src/edge264_inter.c:3:35: warning: suggest parentheses around arithmetic in operand of '|' [-Wparentheses]
+    3 | #define pack_w(w0, w1) ((w1) << 8 | (w0) & 255)
+      |                                   ^
+../src/edge264_inter.c:1137:59: note: in expansion of macro 'pack_w'
+ 1137 |         i16x8 wod = {pack_w(0, 1), 0, 0, 0, pack_w(0, 1), pack_w(0, 1), 0, 0}; // no_weight
+      |                                                           ^~~~~~
+../src/edge264_inter.c:3:42: warning: suggest parentheses around arithmetic in operand of '|' [-Wparentheses]
+    3 | #define pack_w(w0, w1) ((w1) << 8 | (w0) & 255)
+      |                                     ~~~~~^~~~~
+../src/edge264_inter.c:1146:41: note: in expansion of macro 'pack_w'
+ 1146 |                                 int p = pack_w(64 - w1, w1);
+      |                                         ^~~~~~
+../src/edge264_inter.c:3:42: warning: suggest parentheses around arithmetic in operand of '|' [-Wparentheses]
+    3 | #define pack_w(w0, w1) ((w1) << 8 | (w0) & 255)
+      |                                     ~~~~~^~~~~
+../src/edge264_inter.c:1150:45: note: in expansion of macro 'pack_w'
+ 1150 |                                         p = pack_w(2 - (w1 >> 5), w1 >> 5);
+      |                                             ^~~~~~
+../src/edge264_inter.c:3:35: warning: suggest parentheses around arithmetic in operand of '|' [-Wparentheses]
+    3 | #define pack_w(w0, w1) ((w1) << 8 | (w0) & 255)
+      |                                   ^
+../src/edge264_inter.c:1158:34: note: in expansion of macro 'pack_w'
+ 1158 |                         wod[0] = pack_w(0, ctx->t.explicit_weights[0][refIdx]);
+      |                                  ^~~~~~
+../src/edge264_inter.c:3:35: warning: suggest parentheses around arithmetic in operand of '|' [-Wparentheses]
+    3 | #define pack_w(w0, w1) ((w1) << 8 | (w0) & 255)
+      |                                   ^
+../src/edge264_inter.c:1163:34: note: in expansion of macro 'pack_w'
+ 1163 |                         wod[4] = pack_w(0, ctx->t.explicit_weights[1][refIdx]);
+      |                                  ^~~~~~
+../src/edge264_inter.c:3:35: warning: suggest parentheses around arithmetic in operand of '|' [-Wparentheses]
+    3 | #define pack_w(w0, w1) ((w1) << 8 | (w0) & 255)
+      |                                   ^
+../src/edge264_inter.c:1164:34: note: in expansion of macro 'pack_w'
+ 1164 |                         wod[5] = pack_w(0, ctx->t.explicit_weights[2][refIdx]);
+      |                                  ^~~~~~
+../src/edge264_inter.c:3:42: warning: suggest parentheses around arithmetic in operand of '|' [-Wparentheses]
+    3 | #define pack_w(w0, w1) ((w1) << 8 | (w0) & 255)
+      |                                     ~~~~~^~~~~
+../src/edge264_inter.c:1172:34: note: in expansion of macro 'pack_w'
+ 1172 |                         wod[0] = pack_w(ctx->t.explicit_weights[0][refIdxX], ctx->t.explicit_weights[0][refIdx]);
+      |                                  ^~~~~~
+../src/edge264_inter.c:3:42: warning: suggest parentheses around arithmetic in operand of '|' [-Wparentheses]
+    3 | #define pack_w(w0, w1) ((w1) << 8 | (w0) & 255)
+      |                                     ~~~~~^~~~~
+../src/edge264_inter.c:1176:34: note: in expansion of macro 'pack_w'
+ 1176 |                         wod[0] = pack_w(ctx->t.explicit_weights[0][refIdxX] >> 1, ctx->t.explicit_weights[0][refIdx] >> 1);
+      |                                  ^~~~~~
+../src/edge264_inter.c:3:42: warning: suggest parentheses around arithmetic in operand of '|' [-Wparentheses]
+    3 | #define pack_w(w0, w1) ((w1) << 8 | (w0) & 255)
+      |                                     ~~~~~^~~~~
+../src/edge264_inter.c:1181:34: note: in expansion of macro 'pack_w'
+ 1181 |                         wod[4] = pack_w(ctx->t.explicit_weights[1][refIdxX], ctx->t.explicit_weights[1][refIdx]);
+      |                                  ^~~~~~
+../src/edge264_inter.c:3:42: warning: suggest parentheses around arithmetic in operand of '|' [-Wparentheses]
+    3 | #define pack_w(w0, w1) ((w1) << 8 | (w0) & 255)
+      |                                     ~~~~~^~~~~
+../src/edge264_inter.c:1182:34: note: in expansion of macro 'pack_w'
+ 1182 |                         wod[5] = pack_w(ctx->t.explicit_weights[2][refIdxX], ctx->t.explicit_weights[2][refIdx]);
+      |                                  ^~~~~~
+../src/edge264_inter.c:3:42: warning: suggest parentheses around arithmetic in operand of '|' [-Wparentheses]
+    3 | #define pack_w(w0, w1) ((w1) << 8 | (w0) & 255)
+      |                                     ~~~~~^~~~~
+../src/edge264_inter.c:1187:34: note: in expansion of macro 'pack_w'
+ 1187 |                         wod[4] = pack_w(ctx->t.explicit_weights[1][refIdxX] >> 1, ctx->t.explicit_weights[1][refIdx] >> 1);
+      |                                  ^~~~~~
+../src/edge264_inter.c:3:42: warning: suggest parentheses around arithmetic in operand of '|' [-Wparentheses]
+    3 | #define pack_w(w0, w1) ((w1) << 8 | (w0) & 255)
+      |                                     ~~~~~^~~~~
+../src/edge264_inter.c:1188:34: note: in expansion of macro 'pack_w'
+ 1188 |                         wod[5] = pack_w(ctx->t.explicit_weights[2][refIdxX] >> 1, ctx->t.explicit_weights[2][refIdx] >> 1);
+      |                                  ^~~~~~
+../src/edge264_inter.c:1199:59: warning: comparison of integer expressions of different signedness: 'unsigned int' and 'int' [-Wsign-compare]
+ 1199 |         if (__builtin_expect((unsigned)xInt_Y - xWide * 2 >= width_Y - w + 1 - xWide * 5 ||
+      |                                                           ^~
+../src/edge264_inter.c:1200:46: warning: comparison of integer expressions of different signedness: 'unsigned int' and 'int' [-Wsign-compare]
+ 1200 |                 (unsigned)yInt_Y - yWide * 2 >= ctx->t.pic_height_in_mbs * 16 - h + 1 - yWide * 5, 0))
+      |                                              ^~
+In file included from ../src/edge264_headers.c:6:
+../src/edge264_intra.c: In function 'decode_intra4x4':
+../src/edge264_intra.c:291:96: warning: unused parameter 'clip' [-Wunused-parameter]
+  291 | static cold noinline void decode_intra4x4(uint8_t * restrict p, size_t stride, int mode, i16x8 clip) {
+      |                                                                                          ~~~~~~^~~~
+../src/edge264_intra.c: In function 'decode_intra8x8':
+../src/edge264_intra.c:383:96: warning: unused parameter 'clip' [-Wunused-parameter]
+  383 | static cold noinline void decode_intra8x8(uint8_t * restrict p, size_t stride, int mode, i16x8 clip) {
+      |                                                                                          ~~~~~~^~~~
+../src/edge264_intra.c: In function 'decode_intra16x16':
+../src/edge264_intra.c:662:24: warning: unused variable 'nstride' [-Wunused-variable]
+  662 |                 size_t nstride = -stride;
+      |                        ^~~~~~~
+../src/edge264_intra.c:623:98: warning: unused parameter 'clip' [-Wunused-parameter]
+  623 | static cold noinline void decode_intra16x16(uint8_t * restrict p, size_t stride, int mode, i16x8 clip) {
+      |                                                                                            ~~~~~~^~~~
+../src/edge264_intra.c: In function 'decode_intraChroma':
+../src/edge264_intra.c:689:99: warning: unused parameter 'clip' [-Wunused-parameter]
+  689 | static cold noinline void decode_intraChroma(uint8_t * restrict p, size_t stride, int mode, i16x8 clip) {
+      |                                                                                             ~~~~~~^~~~
+In file included from ../src/edge264_headers.c:7:
+../src/edge264_mvpred.c: In function 'mvs_near_zero':
+../src/edge264_mvpred.c:36:43: warning: comparison between types '__vector(4) long unsigned int' and 'i32x4' {aka '__vector(4) long int'} [-Wsign-compare]
+   36 |         return (u32x4)(abs16(mvCol) >> 1) == zero;
+      |                                           ^~
+../src/edge264_mvpred.c: In function 'decode_direct_spatial_mv_pred':
+../src/edge264_mvpred.c:424:78: warning: comparison between types 'i16x8' {aka '__vector(8) short int'} and 'u16x8' {aka '__vector(8) short unsigned int'} [-Wsign-compare]
+  424 |                                 int type = __builtin_ctz(movemask(((mt & mc) == masks) | ((mt & ~mc) == masks))) >> 1;
+      |                                                                              ^~
+../src/edge264_internal.h:724:47: note: in definition of macro 'movemask'
+  724 |         #define movemask(a) _mm_movemask_epi8(a)
+      |                                               ^
+../src/edge264_mvpred.c:424:102: warning: comparison between types 'i16x8' {aka '__vector(8) short int'} and 'u16x8' {aka '__vector(8) short unsigned int'} [-Wsign-compare]
+  424 |                                 int type = __builtin_ctz(movemask(((mt & mc) == masks) | ((mt & ~mc) == masks))) >> 1;
+      |                                                                                                      ^~
+../src/edge264_internal.h:724:47: note: in definition of macro 'movemask'
+  724 |         #define movemask(a) _mm_movemask_epi8(a)
+      |                                               ^
+In file included from ../src/edge264_headers.c:13:
+../src/edge264_slice.c: In function 'parse_mvd_pair_cavlc':
+../src/edge264_slice.c:977:86: warning: unused parameter 'absMvd_lx' [-Wunused-parameter]
+  977 |         static inline i16x8 parse_mvd_pair_cavlc(Edge264Context *ctx, const uint8_t *absMvd_lx, int i4x4) {
+      |                                                                       ~~~~~~~~~~~~~~~^~~~~~~~~
+../src/edge264_slice.c:977:101: warning: unused parameter 'i4x4' [-Wunused-parameter]
+  977 |         static inline i16x8 parse_mvd_pair_cavlc(Edge264Context *ctx, const uint8_t *absMvd_lx, int i4x4) {
+      |                                                                                                 ~~~~^~~~
+../src/edge264_slice.c: In function 'parse_B_sub_mb_cavlc':
+../src/edge264_slice.c:1221:95: warning: suggest parentheses around comparison in operand of '|' [-Wparentheses]
+ 1221 |         refIdx4x4_eq.v[0] = (uC - ifelse_mask(uC==4, r0==D0, r0==C0) * 2 - (r0==B0)) * 2 - (r0==A0 | u==14);
+      |                                                                                             ~~^~~~
+../src/edge264_slice.c:1222:95: warning: suggest parentheses around comparison in operand of '|' [-Wparentheses]
+ 1222 |         refIdx4x4_eq.v[1] = (uC - ifelse_mask(uC==4, r1==D1, r1==C1) * 2 - (r1==B1)) * 2 - (r1==A1 | u==14);
+      |                                                                                             ~~^~~~
+../src/edge264_slice.c: In function 'parse_P_sub_mb_cavlc':
+../src/edge264_slice.c:1499:92: warning: suggest parentheses around comparison in operand of '|' [-Wparentheses]
+ 1499 |         refIdx4x4_eq.v = (uC - ifelse_mask(uC==4, r0==D0, r0==C0) * 2 - (r0==B0)) * 2 - (r0==A0 | u==14);
+      |                                                                                          ~~^~~~
+../src/edge264_slice.c: In function 'parse_slice_data_cavlc':
+../src/edge264_slice.c:1692:42: warning: suggest parentheses around arithmetic in operand of '|' [-Wparentheses]
+ 1692 |                 int filter_edges = 4 | 3 & ~unavail16x16;
+      |                                        ~~^~~~~~~~~~~~~~~
+../src/edge264_internal.h:1246:31: warning: statement with no effect [-Wunused-value]
+ 1246 |         #define print_mb(ctx) (0)
+      |                               ^
+../src/edge264_slice.c:1807:17: note: in expansion of macro 'print_mb'
+ 1807 |                 print_mb(ctx);
+      |                 ^~~~~~~~
+../src/edge264_slice.c:1843:33: error: implicit declaration of function 'pthread_cond_broadcast' [-Wimplicit-function-declaration]
+ 1843 |                                 pthread_cond_broadcast(&ctx->d->task_progress);
+      |                                 ^~~~~~~~~~~~~~~~~~~~~~
+../src/edge264_slice.c:1672:13: warning: unused variable 'end_of_slice_flag' [-Wunused-variable]
+ 1672 |         int end_of_slice_flag = 0;
+      |             ^~~~~~~~~~~~~~~~~
+In file included from ../src/edge264_headers.c:15:
+../src/edge264_slice.c: In function 'parse_coded_block_pattern_cabac':
+../src/edge264_slice.c:685:76: warning: unused parameter 'map_me' [-Wunused-parameter]
+  685 | static always_inline void CAFUNC(parse_coded_block_pattern, const uint8_t *map_me)
+      |                                                             ~~~~~~~~~~~~~~~^~~~~~
+../src/edge264_slice.c:17:68: note: in definition of macro 'CAFUNC'
+   17 |         #define CAFUNC(f, ...) f ## _cabac(Edge264Context *ctx, ## __VA_ARGS__)
+      |                                                                    ^~~~~~~~~~~
+../src/edge264_slice.c: In function 'parse_B_sub_mb_cabac':
+../src/edge264_slice.c:1163:79: warning: comparison of integer expressions of different signedness: 'int' and 'unsigned int' [-Wsign-compare]
+ 1163 |                                         sub += sub + get_ae(ctx, 39), sub - 4 < 2u))
+      |                                                                               ^
+../src/edge264_slice.c:1173:54: warning: unused variable 'sub2mb_type' [-Wunused-variable]
+ 1173 |                                 static const uint8_t sub2mb_type[13] = {3, 4, 5, 6, 1, 2, 11, 12, 7, 8, 9, 10, 0};
+      |                                                      ^~~~~~~~~~~
+../src/edge264_slice.c:1221:95: warning: suggest parentheses around comparison in operand of '|' [-Wparentheses]
+ 1221 |         refIdx4x4_eq.v[0] = (uC - ifelse_mask(uC==4, r0==D0, r0==C0) * 2 - (r0==B0)) * 2 - (r0==A0 | u==14);
+      |                                                                                             ~~^~~~
+../src/edge264_slice.c:1222:95: warning: suggest parentheses around comparison in operand of '|' [-Wparentheses]
+ 1222 |         refIdx4x4_eq.v[1] = (uC - ifelse_mask(uC==4, r1==D1, r1==C1) * 2 - (r1==B1)) * 2 - (r1==A1 | u==14);
+      |                                                                                             ~~^~~~
+../src/edge264_slice.c: In function 'parse_B_mb_cabac':
+../src/edge264_slice.c:1368:63: warning: comparison of integer expressions of different signedness: 'int' and 'unsigned int' [-Wsign-compare]
+ 1368 |                         str += str + get_ae(ctx, 32), str - 8 < 5u))
+      |                                                               ^
+../src/edge264_slice.c:1374:38: warning: unused variable 'str2mb_type' [-Wunused-variable]
+ 1374 |                 static const uint8_t str2mb_type[26] = {3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 0, 0,
+      |                                      ^~~~~~~~~~~
+../src/edge264_slice.c: In function 'parse_P_sub_mb_cabac':
+../src/edge264_slice.c:1499:92: warning: suggest parentheses around comparison in operand of '|' [-Wparentheses]
+ 1499 |         refIdx4x4_eq.v = (uC - ifelse_mask(uC==4, r0==D0, r0==C0) * 2 - (r0==B0)) * 2 - (r0==A0 | u==14);
+      |                                                                                          ~~^~~~
+../src/edge264_slice.c: In function 'parse_slice_data_cabac':
+../src/edge264_slice.c:1692:42: warning: suggest parentheses around arithmetic in operand of '|' [-Wparentheses]
+ 1692 |                 int filter_edges = 4 | 3 & ~unavail16x16;
+      |                                        ~~^~~~~~~~~~~~~~~
+../src/edge264_internal.h:1246:31: warning: statement with no effect [-Wunused-value]
+ 1246 |         #define print_mb(ctx) (0)
+      |                               ^
+../src/edge264_slice.c:1807:17: note: in expansion of macro 'print_mb'
+ 1807 |                 print_mb(ctx);
+      |                 ^~~~~~~~
+../src/edge264_headers.c: In function 'bump_all_frames':
+../src/edge264_headers.c:100:17: error: implicit declaration of function 'pthread_cond_wait' [-Wimplicit-function-declaration]
+  100 |                 pthread_cond_wait(&dec->task_complete, &dec->lock);
+      |                 ^~~~~~~~~~~~~~~~~
+../src/edge264_headers.c:101:58: error: 'ENOBUFS' undeclared (first use in this function); did you mean 'EROFS'?
+  101 |         return dec->to_get_frames | dec->output_frames ? ENOBUFS : 0;
+      |                                                          ^~~~~~~
+      |                                                          EROFS
+../src/edge264_headers.c: In function 'parse_end_of_sequence':
+../src/edge264_headers.c:141:19: error: 'EBADMSG' undeclared (first use in this function); did you mean 'EBADF'?
+  141 |         int ret = EBADMSG;
+      |                   ^~~~~~~
+      |                   EBADF
+../src/edge264_headers.c:144:32: error: 'ENOBUFS' undeclared (first use in this function); did you mean 'EROFS'?
+  144 |                         return ENOBUFS;
+      |                                ^~~~~~~
+      |                                EROFS
+../src/edge264_headers.c:140:76: warning: unused parameter 'unref_cb' [-Wunused-parameter]
+  140 | int ADD_VARIANT(parse_end_of_sequence)(Edge264Decoder *dec, Edge264UnrefCb unref_cb, void *unref_arg) {
+      |                                                             ~~~~~~~~~~~~~~~^~~~~~~~
+../src/edge264_headers.c:140:92: warning: unused parameter 'unref_arg' [-Wunused-parameter]
+  140 | int ADD_VARIANT(parse_end_of_sequence)(Edge264Decoder *dec, Edge264UnrefCb unref_cb, void *unref_arg) {
+      |                                                                                      ~~~~~~^~~~~~~~~
+../src/edge264_headers.c: In function 'recover_slice':
+../src/edge264_headers.c:321:39: warning: comparison of integer expressions of different signedness: 'unsigned int' and 'int16_t' {aka 'short int'} [-Wsign-compare]
+  321 |                                 if (i >= ctx->t.pic_width_in_mbs) // B available
+      |                                       ^~
+../src/edge264_headers.c:325:39: warning: comparison of integer expressions of different signedness: 'unsigned int' and 'int16_t' {aka 'short int'} [-Wsign-compare]
+  325 |                                 if (i >= ctx->t.pic_width_in_mbs) // B available
+      |                                       ^~
+../src/edge264_headers.c:369:31: warning: unused variable 'lbr' [-Wunused-variable]
+  369 |                         i8x16 lbr = ldleftC(c0, stride_C, 0); // from intra.c
+      |                               ^~~
+../src/edge264_headers.c: In function 'worker_loop':
+../src/edge264_headers.c:450:62: warning: operand of '?:' changes signedness from 'int' to 'long unsigned int' due to unsignedness of other operand [-Wsign-compare]
+  450 |         c.thread_id = c.d->n_threads ? (uintptr_t)arg & 15 : -1;
+      |                                                              ^~
+../src/edge264_headers.c:457:17: error: implicit declaration of function 'pthread_mutex_lock' [-Wimplicit-function-declaration]
+  457 |                 pthread_mutex_lock(&c.d->lock);
+      |                 ^~~~~~~~~~~~~~~~~~
+../src/edge264_headers.c:468:25: error: implicit declaration of function 'pthread_mutex_unlock' [-Wimplicit-function-declaration]
+  468 |                         pthread_mutex_unlock(&c.d->lock);
+      |                         ^~~~~~~~~~~~~~~~~~~~
+../src/edge264_headers.c:480:39: error: 'EBADMSG' undeclared (first use in this function); did you mean 'EBADF'?
+  480 |                                 ret = EBADMSG;
+      |                                       ^~~~~~~
+      |                                       EBADF
+../src/edge264_headers.c:529:53: warning: comparison of integer expressions of different signedness: 'int32_t' {aka 'long int'} and 'uint32_t' {aka 'long unsigned int'} [-Wsign-compare]
+  529 |                 if (c.d->next_deblock_addr[currPic] >= c.t.first_mb_in_slice &&
+      |                                                     ^~
+../src/edge264_headers.c:536:44: warning: operand of '?:' changes signedness from 'long int' to 'size_t' {aka 'long unsigned int'} due to unsignedness of other operand [-Wsign-compare]
+  536 |                 int remaining_mbs = ret ?: __atomic_sub_fetch(&c.d->remaining_mbs[currPic], c.CurrMbAddr - c.t.first_mb_in_slice, __ATOMIC_ACQ_REL);
+      |                                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../src/edge264_headers.c:540:61: warning: comparison of integer expressions of different signedness: 'unsigned int' and 'int32_t' {aka 'long int'} [-Wsign-compare]
+  540 |                         if ((unsigned)c.t.next_deblock_addr < c.CurrMbAddr) {
+      |                                                             ^
+../src/edge264_headers.c:571:33: warning: format '%u' expects argument of type 'unsigned int', but argument 5 has type 'int32_t' {aka 'long int'} [-Wformat=]
+  571 |                                 "\n- thread_id: %d\n"
+      |                                 ^~~~~~~~~~~~~~~~~~~~~
+......
+  578 |                                 c.thread_id, c.t.FrameId, c.t.first_mb_in_slice, approx_byte_size, clock_start, clock_end, ret_to_str(ret));
+      |                                              ~~~~~~~~~~~
+      |                                                 |
+      |                                                 int32_t {aka long int}
+../src/edge264_headers.c:572:46: note: format string is defined here
+  572 |                                 "  FrameId: %u\n"
+      |                                             ~^
+      |                                              |
+      |                                              unsigned int
+      |                                             %lu
+../src/edge264_headers.c:571:33: warning: format '%u' expects argument of type 'unsigned int', but argument 6 has type 'uint32_t' {aka 'long unsigned int'} [-Wformat=]
+  571 |                                 "\n- thread_id: %d\n"
+      |                                 ^~~~~~~~~~~~~~~~~~~~~
+......
+  578 |                                 c.thread_id, c.t.FrameId, c.t.first_mb_in_slice, approx_byte_size, clock_start, clock_end, ret_to_str(ret));
+      |                                                           ~~~~~~~~~~~~~~~~~~~~~
+      |                                                              |
+      |                                                              uint32_t {aka long unsigned int}
+../src/edge264_headers.c:573:56: note: format string is defined here
+  573 |                                 "  first_mb_in_slice: %u\n"
+      |                                                       ~^
+      |                                                        |
+      |                                                        unsigned int
+      |                                                       %lu
+../src/edge264_headers.c:585:25: error: implicit declaration of function 'pthread_cond_signal' [-Wimplicit-function-declaration]
+  585 |                         pthread_cond_signal(&c.d->task_complete);
+      |                         ^~~~~~~~~~~~~~~~~~~
+../src/edge264_headers.c: In function 'parse_dec_ref_pic_marking':
+../src/edge264_headers.c:620:21: warning: unused variable 'no_output_of_prior_pics_flag' [-Wunused-variable]
+  620 |                 int no_output_of_prior_pics_flag = get_u1(&dec->gb);
+      |                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../src/edge264_headers.c:610:35: warning: unused variable 'mmco_names' [-Wunused-variable]
+  610 |         static const char * const mmco_names[6] = {
+      |                                   ^~~~~~~~~~
+../src/edge264_headers.c: In function 'initialize_task':
+../src/edge264_headers.c:919:69: warning: comparison of integer expressions of different signedness: 'int32_t' {aka 'long int'} and 'uint32_t' {aka 'long unsigned int'} [-Wsign-compare]
+  919 |         t->next_deblock_idc = (dec->next_deblock_addr[dec->currPic] == t->first_mb_in_slice &&
+      |                                                                     ^~
+../src/edge264_headers.c:921:70: warning: comparison of integer expressions of different signedness: 'int32_t' {aka 'long int'} and 'uint32_t' {aka 'long unsigned int'} [-Wsign-compare]
+  921 |         t->next_deblock_addr = (dec->next_deblock_addr[dec->currPic] == t->first_mb_in_slice ||
+      |                                                                      ^~
+../src/edge264_headers.c: In function 'parse_slice_layer_without_partitioning':
+../src/edge264_headers.c:990:68: error: 'ENOTSUP' undeclared (first use in this function)
+  990 |                 return print_dec(dec, "  decode_NAL_result: %s\n", ENOTSUP); // exit now if the rest of the slice can't be correctly parsed
+      |                                                                    ^~~~~~~
+../src/edge264_internal.h:1244:46: note: in definition of macro 'print_dec'
+ 1244 |         #define print_dec(dec, suffix, ret) (ret)
+      |                                              ^~~
+../src/edge264_headers.c:993:68: error: 'EBADMSG' undeclared (first use in this function); did you mean 'EBADF'?
+  993 |                 return print_dec(dec, "  decode_NAL_result: %s\n", EBADMSG); // exit now if SPS or PPS wasn't initialized
+      |                                                                    ^~~~~~~
+../src/edge264_internal.h:1244:46: note: in definition of macro 'print_dec'
+ 1244 |         #define print_dec(dec, suffix, ret) (ret)
+      |                                              ^~~
+../src/edge264_headers.c:1035:60: warning: comparison of integer expressions of different signedness: 'int' and 'unsigned int' [-Wsign-compare]
+ 1035 |                 if (dec->currPic >= 0 && pic_order_cnt_lsb != ((unsigned)dec->TopFieldOrderCnt << shift >> shift))
+      |                                                            ^~
+../src/edge264_headers.c:1111:96: warning: suggest parentheses around arithmetic in operand of '|' [-Wparentheses]
+ 1111 |                 while (non_existing + __builtin_popcount(reference_frames | dec->to_get_frames & ~dec->output_frames) > sps->max_dec_frame_buffering && bump_frame(dec, non_base_view, 0));
+      |                                                                             ~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~
+In file included from ../src/edge264_internal.h:8:
+../src/edge264_headers.c:1112:96: warning: suggest parentheses around arithmetic in operand of '|' [-Wparentheses]
+ 1112 |                 assert(non_existing + __builtin_popcount(reference_frames | dec->to_get_frames & ~dec->output_frames) <= sps->max_dec_frame_buffering);
+      |                                                                             ~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~
+../src/edge264_headers.c:1114:32: error: 'ENOBUFS' undeclared (first use in this function); did you mean 'EROFS'?
+ 1114 |                         return ENOBUFS; // exit here if we must wait for get_frame to consume and return enough frames
+      |                                ^~~~~~~
+      |                                EROFS
+../src/edge264_headers.c:1120:81: warning: comparison of integer expressions of different signedness: 'unsigned int' and 'int32_t' {aka 'long int'} [-Wsign-compare]
+ 1120 |                 for (unsigned FrameNum = dec->FrameNum - non_existing; FrameNum < dec->FrameNum; FrameNum++) {
+      |                                                                                 ^
+../src/edge264_headers.c:1128:69: warning: suggest parentheses around arithmetic in operand of '|' [-Wparentheses]
+ 1128 |                         dec->non_base_frames = dec->non_base_frames & ~(1 << i) | non_base_view << i;
+      |                                                ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~
+../src/edge264_headers.c:1159:61: warning: suggest parentheses around arithmetic in operand of '|' [-Wparentheses]
+ 1159 |                 dec->non_base_frames = dec->non_base_frames & ~(1 << currPic) | non_base_view << currPic;
+      |                                        ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~
+../src/edge264_headers.c:1230:74: warning: suggest parentheses around arithmetic in operand of '|' [-Wparentheses]
+ 1230 |                 unsigned short_term_frames = dec->prev_short_term_frames & ~same_views | dec->short_term_frames;
+      |                                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~
+../src/edge264_headers.c:1231:72: warning: suggest parentheses around arithmetic in operand of '|' [-Wparentheses]
+ 1231 |                 unsigned long_term_frames = dec->prev_long_term_frames & ~same_views | dec->long_term_frames;
+      |                                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~
+../src/edge264_headers.c:1234:103: warning: suggest parentheses around arithmetic in operand of '|' [-Wparentheses]
+ 1234 |                 assert(__builtin_popcount(reference_frames | dec->to_get_frames & ~dec->output_frames & ~same_views) <= sps->max_dec_frame_buffering);
+      |                                                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~
+../src/edge264_headers.c:1241:81: warning: suggest parentheses around arithmetic in operand of '|' [-Wparentheses]
+ 1241 |                 while (__builtin_popcount(reference_frames | dec->to_get_frames & ~dec->output_frames) > sps->max_dec_frame_buffering && max_bump--)
+      |                                                              ~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~
+../src/edge264_headers.c:953:35: warning: unused variable 'disable_deblocking_filter_idc_names' [-Wunused-variable]
+  953 |         static const char * const disable_deblocking_filter_idc_names[3] = {"enabled", "disabled", "sliced"};
+      |                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../src/edge264_headers.c:952:35: warning: unused variable 'slice_type_names' [-Wunused-variable]
+  952 |         static const char * const slice_type_names[5] = {"P", "B", "I", "SP", "SI"};
+      |                                   ^~~~~~~~~~~~~~~~
+../src/edge264_headers.c: In function 'parse_nal_unit_header_extension':
+../src/edge264_headers.c:1306:19: error: 'ENOTSUP' undeclared (first use in this function)
+ 1306 |         int ret = ENOTSUP;
+      |                   ^~~~~~~
+../src/edge264_headers.c:1308:43: warning: suggest parentheses around arithmetic in operand of '^' [-Wparentheses]
+ 1308 |                 dec->IdrPicFlag = u >> 22 & 1 ^ 1;
+      |                                   ~~~~~~~~^~~
+../src/edge264_headers.c:1325:90: error: 'EBADMSG' undeclared (first use in this function); did you mean 'EBADF'?
+ 1325 |         return print_dec(dec, "  decode_NAL_result: %s\n", rbsp_end(&dec->gb, 0) ? ret : EBADMSG);
+      |                                                                                          ^~~~~~~
+../src/edge264_internal.h:1244:46: note: in definition of macro 'print_dec'
+ 1244 |         #define print_dec(dec, suffix, ret) (ret)
+      |                                              ^~~
+../src/edge264_headers.c: In function 'parse_pic_parameter_set':
+../src/edge264_headers.c:1430:23: error: 'ENOTSUP' undeclared (first use in this function)
+ 1430 |                 ret = ENOTSUP;
+      |                       ^~~~~~~
+../src/edge264_headers.c:1492:23: error: 'EBADMSG' undeclared (first use in this function); did you mean 'EBADF'?
+ 1492 |                 ret = EBADMSG;
+      |                       ^~~~~~~
+      |                       EBADF
+../src/edge264_headers.c:1417:35: warning: unused variable 'weighted_pred_names' [-Wunused-variable]
+ 1417 |         static const char * const weighted_pred_names[3] = {"average", "explicit", "implicit"};
+      |                                   ^~~~~~~~~~~~~~~~~~~
+../src/edge264_headers.c:1415:79: warning: unused parameter 'unref_cb' [-Wunused-parameter]
+ 1415 | int ADD_VARIANT(parse_pic_parameter_set)(Edge264Decoder *dec,  Edge264UnrefCb unref_cb, void *unref_arg)
+      |                                                                ~~~~~~~~~~~~~~~^~~~~~~~
+../src/edge264_headers.c:1415:95: warning: unused parameter 'unref_arg' [-Wunused-parameter]
+ 1415 | int ADD_VARIANT(parse_pic_parameter_set)(Edge264Decoder *dec,  Edge264UnrefCb unref_cb, void *unref_arg)
+      |                                                                                         ~~~~~~^~~~~~~~~
+../src/edge264_headers.c: In function 'parse_hrd_parameters':
+../src/edge264_headers.c:1512:21: warning: unused variable 'cbr_flag' [-Wunused-variable]
+ 1512 |                 int cbr_flag = get_u1(&dec->gb);
+      |                     ^~~~~~~~
+../src/edge264_headers.c:1511:36: warning: unused variable 'cpb_size_value' [-Wunused-variable]
+ 1511 |                 unsigned long long cpb_size_value = get_ue32(&dec->gb, 4294967294) + 1;
+      |                                    ^~~~~~~~~~~~~~
+../src/edge264_headers.c:1510:36: warning: unused variable 'bit_rate_value' [-Wunused-variable]
+ 1510 |                 unsigned long long bit_rate_value = get_ue32(&dec->gb, 4294967294) + 1;
+      |                                    ^~~~~~~~~~~~~~
+../src/edge264_headers.c:1507:13: warning: unused variable 'cpb_size_scale' [-Wunused-variable]
+ 1507 |         int cpb_size_scale = get_uv(&dec->gb, 4);
+      |             ^~~~~~~~~~~~~~
+../src/edge264_headers.c:1506:13: warning: unused variable 'bit_rate_scale' [-Wunused-variable]
+ 1506 |         int bit_rate_scale = get_uv(&dec->gb, 4);
+      |             ^~~~~~~~~~~~~~
+../src/edge264_headers.c:1504:113: warning: unused parameter 'indent' [-Wunused-parameter]
+ 1504 | static void parse_hrd_parameters(Edge264Decoder *dec, Edge264SeqParameterSet *sps, int8_t *cpb_cnt, const char *indent) {
+      |                                                                                                     ~~~~~~~~~~~~^~~~~~
+../src/edge264_headers.c: In function 'parse_vui_parameters':
+../src/edge264_headers.c:1547:23: warning: initialized field overwritten [-Woverride-init]
+ 1547 |                 [1] = "ITU-R BT.709-5",
+      |                       ^~~~~~~~~~~~~~~~
+../src/edge264_headers.c:1547:23: note: (near initialization for 'colour_primaries_names[1]')
+../src/edge264_headers.c:1548:23: warning: initialized field overwritten [-Woverride-init]
+ 1548 |                 [4] = "ITU-R BT.470-6 System M",
+      |                       ^~~~~~~~~~~~~~~~~~~~~~~~~
+../src/edge264_headers.c:1548:23: note: (near initialization for 'colour_primaries_names[4]')
+../src/edge264_headers.c:1549:23: warning: initialized field overwritten [-Woverride-init]
+ 1549 |                 [5] = "ITU-R BT.470-6 System B, G",
+      |                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../src/edge264_headers.c:1549:23: note: (near initialization for 'colour_primaries_names[5]')
+../src/edge264_headers.c:1550:29: warning: initialized field overwritten [-Woverride-init]
+ 1550 |                 [6 ... 7] = "ITU-R BT.601-6 525",
+      |                             ^~~~~~~~~~~~~~~~~~~~
+../src/edge264_headers.c:1550:29: note: (near initialization for 'colour_primaries_names[6]')
+../src/edge264_headers.c:1550:29: warning: initialized field overwritten [-Woverride-init]
+../src/edge264_headers.c:1550:29: note: (near initialization for 'colour_primaries_names[7]')
+../src/edge264_headers.c:1551:23: warning: initialized field overwritten [-Woverride-init]
+ 1551 |                 [8] = "Generic film",
+      |                       ^~~~~~~~~~~~~~
+../src/edge264_headers.c:1551:23: note: (near initialization for 'colour_primaries_names[8]')
+../src/edge264_headers.c:1552:23: warning: initialized field overwritten [-Woverride-init]
+ 1552 |                 [9] = "ITU-R BT.2020-2",
+      |                       ^~~~~~~~~~~~~~~~~
+../src/edge264_headers.c:1552:23: note: (near initialization for 'colour_primaries_names[9]')
+../src/edge264_headers.c:1553:24: warning: initialized field overwritten [-Woverride-init]
+ 1553 |                 [10] = "CIE 1931 XYZ",
+      |                        ^~~~~~~~~~~~~~
+../src/edge264_headers.c:1553:24: note: (near initialization for 'colour_primaries_names[10]')
+../src/edge264_headers.c:1554:24: warning: initialized field overwritten [-Woverride-init]
+ 1554 |                 [11] = "Society of Motion Picture and Television Engineers RP 431-2",
+      |                        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../src/edge264_headers.c:1554:24: note: (near initialization for 'colour_primaries_names[11]')
+../src/edge264_headers.c:1555:24: warning: initialized field overwritten [-Woverride-init]
+ 1555 |                 [12] = "Society of Motion Picture and Television Engineers EG 432-1",
+      |                        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../src/edge264_headers.c:1555:24: note: (near initialization for 'colour_primaries_names[12]')
+../src/edge264_headers.c:1556:24: warning: initialized field overwritten [-Woverride-init]
+ 1556 |                 [22] = "EBU Tech. 3213-E",
+      |                        ^~~~~~~~~~~~~~~~~~
+../src/edge264_headers.c:1556:24: note: (near initialization for 'colour_primaries_names[22]')
+../src/edge264_headers.c:1560:23: warning: initialized field overwritten [-Woverride-init]
+ 1560 |                 [1] = "ITU-R BT.709-5",
+      |                       ^~~~~~~~~~~~~~~~
+../src/edge264_headers.c:1560:23: note: (near initialization for 'transfer_characteristics_names[1]')
+../src/edge264_headers.c:1561:23: warning: initialized field overwritten [-Woverride-init]
+ 1561 |                 [4] = "ITU-R BT.470-6 System M",
+      |                       ^~~~~~~~~~~~~~~~~~~~~~~~~
+../src/edge264_headers.c:1561:23: note: (near initialization for 'transfer_characteristics_names[4]')
+../src/edge264_headers.c:1562:23: warning: initialized field overwritten [-Woverride-init]
+ 1562 |                 [5] = "ITU-R BT.470-6 System B, G",
+      |                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../src/edge264_headers.c:1562:23: note: (near initialization for 'transfer_characteristics_names[5]')
+../src/edge264_headers.c:1563:23: warning: initialized field overwritten [-Woverride-init]
+ 1563 |                 [6] = "ITU-R BT.601-6 525 or 625",
+      |                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+../src/edge264_headers.c:1563:23: note: (near initialization for 'transfer_characteristics_names[6]')
+../src/edge264_headers.c:1564:23: warning: initialized field overwritten [-Woverride-init]
+ 1564 |                 [7] = "Society of Motion Picture and Television Engineers 240M",
+      |                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../src/edge264_headers.c:1564:23: note: (near initialization for 'transfer_characteristics_names[7]')
+../src/edge264_headers.c:1565:23: warning: initialized field overwritten [-Woverride-init]
+ 1565 |                 [8] = "Linear transfer characteristics",
+      |                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../src/edge264_headers.c:1565:23: note: (near initialization for 'transfer_characteristics_names[8]')
+../src/edge264_headers.c:1566:23: warning: initialized field overwritten [-Woverride-init]
+ 1566 |                 [9] = "Logarithmic transfer characteristic (100:1 range)",
+      |                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../src/edge264_headers.c:1566:23: note: (near initialization for 'transfer_characteristics_names[9]')
+../src/edge264_headers.c:1567:24: warning: initialized field overwritten [-Woverride-init]
+ 1567 |                 [10] = "Logarithmic transfer characteristic (100 * Sqrt( 10 ) : 1 range)",
+      |                        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../src/edge264_headers.c:1567:24: note: (near initialization for 'transfer_characteristics_names[10]')
+../src/edge264_headers.c:1568:24: warning: initialized field overwritten [-Woverride-init]
+ 1568 |                 [11] = "IEC 61966-2-4",
+      |                        ^~~~~~~~~~~~~~~
+../src/edge264_headers.c:1568:24: note: (near initialization for 'transfer_characteristics_names[11]')
+../src/edge264_headers.c:1569:24: warning: initialized field overwritten [-Woverride-init]
+ 1569 |                 [12] = "ITU-R BT.1361-0",
+      |                        ^~~~~~~~~~~~~~~~~
+../src/edge264_headers.c:1569:24: note: (near initialization for 'transfer_characteristics_names[12]')
+../src/edge264_headers.c:1570:24: warning: initialized field overwritten [-Woverride-init]
+ 1570 |                 [13] = "IEC 61966-2-1 sRGB or sYCC",
+      |                        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../src/edge264_headers.c:1570:24: note: (near initialization for 'transfer_characteristics_names[13]')
+../src/edge264_headers.c:1571:24: warning: initialized field overwritten [-Woverride-init]
+ 1571 |                 [14] = "ITU-R BT.2020-2 (10 bit system)",
+      |                        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../src/edge264_headers.c:1571:24: note: (near initialization for 'transfer_characteristics_names[14]')
+../src/edge264_headers.c:1572:24: warning: initialized field overwritten [-Woverride-init]
+ 1572 |                 [15] = "ITU-R BT.2020-2 (12 bit system)",
+      |                        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../src/edge264_headers.c:1572:24: note: (near initialization for 'transfer_characteristics_names[15]')
+../src/edge264_headers.c:1573:24: warning: initialized field overwritten [-Woverride-init]
+ 1573 |                 [16] = "Society of Motion Picture and Television Engineers ST 2084",
+      |                        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../src/edge264_headers.c:1573:24: note: (near initialization for 'transfer_characteristics_names[16]')
+../src/edge264_headers.c:1574:24: warning: initialized field overwritten [-Woverride-init]
+ 1574 |                 [17] = "Society of Motion Picture and Television Engineers ST 428-1",
+      |                        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../src/edge264_headers.c:1574:24: note: (near initialization for 'transfer_characteristics_names[17]')
+../src/edge264_headers.c:1578:23: warning: initialized field overwritten [-Woverride-init]
+ 1578 |                 [1] = "Kr = 0.2126; Kb = 0.0722",
+      |                       ^~~~~~~~~~~~~~~~~~~~~~~~~~
+../src/edge264_headers.c:1578:23: note: (near initialization for 'matrix_coefficients_names[1]')
+../src/edge264_headers.c:1579:23: warning: initialized field overwritten [-Woverride-init]
+ 1579 |                 [4] = "Kr = 0.30; Kb = 0.11",
+      |                       ^~~~~~~~~~~~~~~~~~~~~~
+../src/edge264_headers.c:1579:23: note: (near initialization for 'matrix_coefficients_names[4]')
+../src/edge264_headers.c:1580:29: warning: initialized field overwritten [-Woverride-init]
+ 1580 |                 [5 ... 6] = "Kr = 0.299; Kb = 0.114",
+      |                             ^~~~~~~~~~~~~~~~~~~~~~~~
+../src/edge264_headers.c:1580:29: note: (near initialization for 'matrix_coefficients_names[5]')
+../src/edge264_headers.c:1580:29: warning: initialized field overwritten [-Woverride-init]
+../src/edge264_headers.c:1580:29: note: (near initialization for 'matrix_coefficients_names[6]')
+../src/edge264_headers.c:1581:23: warning: initialized field overwritten [-Woverride-init]
+ 1581 |                 [7] = "Kr = 0.212; Kb = 0.087",
+      |                       ^~~~~~~~~~~~~~~~~~~~~~~~
+../src/edge264_headers.c:1581:23: note: (near initialization for 'matrix_coefficients_names[7]')
+../src/edge264_headers.c:1582:23: warning: initialized field overwritten [-Woverride-init]
+ 1582 |                 [8] = "YCgCo",
+      |                       ^~~~~~~
+../src/edge264_headers.c:1582:23: note: (near initialization for 'matrix_coefficients_names[8]')
+../src/edge264_headers.c:1583:23: warning: initialized field overwritten [-Woverride-init]
+ 1583 |                 [9] = "Kr = 0.2627; Kb = 0.0593 (non-constant luminance)",
+      |                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../src/edge264_headers.c:1583:23: note: (near initialization for 'matrix_coefficients_names[9]')
+../src/edge264_headers.c:1584:24: warning: initialized field overwritten [-Woverride-init]
+ 1584 |                 [10] = "Kr = 0.2627; Kb = 0.0593 (constant luminance)",
+      |                        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../src/edge264_headers.c:1584:24: note: (near initialization for 'matrix_coefficients_names[10]')
+../src/edge264_headers.c:1585:24: warning: initialized field overwritten [-Woverride-init]
+ 1585 |                 [11] = "Y'D'zD'x",
+      |                        ^~~~~~~~~~
+../src/edge264_headers.c:1585:24: note: (near initialization for 'matrix_coefficients_names[11]')
+../src/edge264_headers.c:1592:21: warning: unused variable 'sar_height' [-Wunused-variable]
+ 1592 |                 int sar_height = sar & 0xffff;
+      |                     ^~~~~~~~~~
+../src/edge264_headers.c:1591:21: warning: unused variable 'sar_width' [-Wunused-variable]
+ 1591 |                 int sar_width = sar >> 16;
+      |                     ^~~~~~~~~
+../src/edge264_headers.c:1610:29: warning: unused variable 'matrix_coefficients' [-Wunused-variable]
+ 1610 |                         int matrix_coefficients = desc & 0xff;
+      |                             ^~~~~~~~~~~~~~~~~~~
+../src/edge264_headers.c:1609:29: warning: unused variable 'transfer_characteristics' [-Wunused-variable]
+ 1609 |                         int transfer_characteristics = (desc >> 8) & 0xff;
+      |                             ^~~~~~~~~~~~~~~~~~~~~~~~
+../src/edge264_headers.c:1608:29: warning: unused variable 'colour_primaries' [-Wunused-variable]
+ 1608 |                         int colour_primaries = desc >> 16;
+      |                             ^~~~~~~~~~~~~~~~
+../src/edge264_headers.c:1601:21: warning: unused variable 'video_full_range_flag' [-Wunused-variable]
+ 1601 |                 int video_full_range_flag = get_u1(&dec->gb);
+      |                     ^~~~~~~~~~~~~~~~~~~~~
+../src/edge264_headers.c:1600:21: warning: unused variable 'video_format' [-Wunused-variable]
+ 1600 |                 int video_format = get_uv(&dec->gb, 3);
+      |                     ^~~~~~~~~~~~
+../src/edge264_headers.c:1621:21: warning: unused variable 'chroma_sample_loc_type_bottom_field' [-Wunused-variable]
+ 1621 |                 int chroma_sample_loc_type_bottom_field = get_ue16(&dec->gb, 5);
+      |                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../src/edge264_headers.c:1620:21: warning: unused variable 'chroma_sample_loc_type_top_field' [-Wunused-variable]
+ 1620 |                 int chroma_sample_loc_type_top_field = get_ue16(&dec->gb, 5);
+      |                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../src/edge264_headers.c:1628:21: warning: unused variable 'fixed_frame_rate_flag' [-Wunused-variable]
+ 1628 |                 int fixed_frame_rate_flag = get_u1(&dec->gb);
+      |                     ^~~~~~~~~~~~~~~~~~~~~
+../src/edge264_headers.c:1647:21: warning: unused variable 'low_delay_hrd_flag' [-Wunused-variable]
+ 1647 |                 int low_delay_hrd_flag = get_u1(&dec->gb);
+      |                     ^~~~~~~~~~~~~~~~~~
+../src/edge264_headers.c:1661:162: warning: suggest braces around empty body in an 'if' statement [-Wempty-body]
+ 1661 |                         log_dec(dec, "    max_bytes_per_pic: %u\n", (sps->pic_width_in_mbs * sps->pic_height_in_mbs * RawMbBits) / (8 * max_bytes_per_pic_denom));
+      |                                                                                                                                                                  ^
+../src/edge264_headers.c:1664:109: warning: suggest braces around empty body in an 'if' statement [-Wempty-body]
+ 1664 |                         log_dec(dec, "    max_bits_per_mb: %u\n", (128 + RawMbBits) / max_bits_per_mb_denom);
+      |                                                                                                             ^
+../src/edge264_headers.c:1666:21: warning: unused variable 'log2_max_mv_length_vertical' [-Wunused-variable]
+ 1666 |                 int log2_max_mv_length_vertical = get_ue16(&dec->gb, 15);
+      |                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+../src/edge264_headers.c:1665:21: warning: unused variable 'log2_max_mv_length_horizontal' [-Wunused-variable]
+ 1665 |                 int log2_max_mv_length_horizontal = get_ue16(&dec->gb, 15);
+      |                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../src/edge264_headers.c:1658:21: warning: unused variable 'RawMbBits' [-Wunused-variable]
+ 1658 |                 int RawMbBits = 256 * sps->BitDepth_Y + (64 << sps->chroma_format_idc & ~64) * sps->BitDepth_C;
+      |                     ^~~~~~~~~
+../src/edge264_headers.c:1655:21: warning: unused variable 'motion_vectors_over_pic_boundaries_flag' [-Wunused-variable]
+ 1655 |                 int motion_vectors_over_pic_boundaries_flag = get_u1(&dec->gb);
+      |                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../src/edge264_headers.c:1596:13: warning: unused variable 'overscan_appropriate_flag' [-Wunused-variable]
+ 1596 |         int overscan_appropriate_flag = get_u1(&dec->gb) ? get_u1(&dec->gb) : -1;
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~
+../src/edge264_headers.c:1576:35: warning: unused variable 'matrix_coefficients_names' [-Wunused-variable]
+ 1576 |         static const char * const matrix_coefficients_names[] = {
+      |                                   ^~~~~~~~~~~~~~~~~~~~~~~~~
+../src/edge264_headers.c:1558:35: warning: unused variable 'transfer_characteristics_names' [-Wunused-variable]
+ 1558 |         static const char * const transfer_characteristics_names[] = {
+      |                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../src/edge264_headers.c:1545:35: warning: unused variable 'colour_primaries_names' [-Wunused-variable]
+ 1545 |         static const char * const colour_primaries_names[] = {
+      |                                   ^~~~~~~~~~~~~~~~~~~~~~
+../src/edge264_headers.c:1543:35: warning: unused variable 'video_format_names' [-Wunused-variable]
+ 1543 |         static const char * const video_format_names[8] = {"Component", "PAL",
+      |                                   ^~~~~~~~~~~~~~~~~~
+../src/edge264_headers.c: In function 'parse_mvc_vui_parameters_extension':
+../src/edge264_headers.c:1701:29: warning: unused variable 'view_id' [-Wunused-variable]
+ 1701 |                         int view_id = get_ue16(&dec->gb, 1023);
+      |                             ^~~~~~~
+../src/edge264_headers.c:1707:29: warning: unused variable 'fixed_frame_rate_flag' [-Wunused-variable]
+ 1707 |                         int fixed_frame_rate_flag = get_u1(&dec->gb);
+      |                             ^~~~~~~~~~~~~~~~~~~~~
+../src/edge264_headers.c:1706:34: warning: unused variable 'time_scale' [-Wunused-variable]
+ 1706 |                         unsigned time_scale = get_uv(&dec->gb, 32);
+      |                                  ^~~~~~~~~~
+../src/edge264_headers.c:1705:34: warning: unused variable 'num_units_in_tick' [-Wunused-variable]
+ 1705 |                         unsigned num_units_in_tick = get_uv(&dec->gb, 32);
+      |                                  ^~~~~~~~~~~~~~~~~
+../src/edge264_headers.c:1724:29: warning: unused variable 'low_delay_hrd_flag' [-Wunused-variable]
+ 1724 |                         int low_delay_hrd_flag = get_u1(&dec->gb);
+      |                             ^~~~~~~~~~~~~~~~~~
+../src/edge264_headers.c:1727:21: warning: unused variable 'pic_struct_present_flag' [-Wunused-variable]
+ 1727 |                 int pic_struct_present_flag = get_u1(&dec->gb);
+      |                     ^~~~~~~~~~~~~~~~~~~~~~~
+../src/edge264_headers.c:1697:21: warning: unused variable 'temporal_id' [-Wunused-variable]
+ 1697 |                 int temporal_id = get_uv(&dec->gb, 3);
+      |                     ^~~~~~~~~~~
+../src/edge264_headers.c: In function 'parse_seq_parameter_set_mvc_extension':
+../src/edge264_headers.c:1742:21: warning: unused variable 'view_id' [-Wunused-variable]
+ 1742 |                 int view_id = get_ue16(&dec->gb, 1023);
+      |                     ^~~~~~~
+../src/edge264_headers.c:1747:24: error: 'ENOTSUP' undeclared (first use in this function)
+ 1747 |                 return ENOTSUP;
+      |                        ^~~~~~~
+../src/edge264_headers.c:1777:37: warning: unused variable 'applicable_op_target_view_id' [-Wunused-variable]
+ 1777 |                                 int applicable_op_target_view_id = get_ue16(&dec->gb, 1023);
+      |                                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../src/edge264_headers.c:1780:29: warning: unused variable 'applicable_op_num_views' [-Wunused-variable]
+ 1780 |                         int applicable_op_num_views = get_ue16(&dec->gb, 1023) + 1;
+      |                             ^~~~~~~~~~~~~~~~~~~~~~~
+../src/edge264_headers.c:1774:29: warning: unused variable 'applicable_op_temporal_id' [-Wunused-variable]
+ 1774 |                         int applicable_op_temporal_id = get_uv(&dec->gb, 3);
+      |                             ^~~~~~~~~~~~~~~~~~~~~~~~~
+../src/edge264_headers.c:1770:21: warning: unused variable 'level_idc' [-Wunused-variable]
+ 1770 |                 int level_idc = get_uv(&dec->gb, 8);
+      |                     ^~~~~~~~~
+../src/edge264_headers.c: In function 'parse_seq_parameter_set':
+../src/edge264_headers.c:1797:24: warning: initialized field overwritten [-Woverride-init]
+ 1797 |                 [44] = "CAVLC 4:4:4 Intra",
+      |                        ^~~~~~~~~~~~~~~~~~~
+../src/edge264_headers.c:1797:24: note: (near initialization for 'profile_idc_names[44]')
+../src/edge264_headers.c:1798:24: warning: initialized field overwritten [-Woverride-init]
+ 1798 |                 [66] = "Baseline",
+      |                        ^~~~~~~~~~
+../src/edge264_headers.c:1798:24: note: (near initialization for 'profile_idc_names[66]')
+../src/edge264_headers.c:1799:24: warning: initialized field overwritten [-Woverride-init]
+ 1799 |                 [77] = "Main",
+      |                        ^~~~~~
+../src/edge264_headers.c:1799:24: note: (near initialization for 'profile_idc_names[77]')
+../src/edge264_headers.c:1800:24: warning: initialized field overwritten [-Woverride-init]
+ 1800 |                 [83] = "Scalable Baseline",
+      |                        ^~~~~~~~~~~~~~~~~~~
+../src/edge264_headers.c:1800:24: note: (near initialization for 'profile_idc_names[83]')
+../src/edge264_headers.c:1801:24: warning: initialized field overwritten [-Woverride-init]
+ 1801 |                 [86] = "Scalable High",
+      |                        ^~~~~~~~~~~~~~~
+../src/edge264_headers.c:1801:24: note: (near initialization for 'profile_idc_names[86]')
+../src/edge264_headers.c:1802:24: warning: initialized field overwritten [-Woverride-init]
+ 1802 |                 [88] = "Extended",
+      |                        ^~~~~~~~~~
+../src/edge264_headers.c:1802:24: note: (near initialization for 'profile_idc_names[88]')
+../src/edge264_headers.c:1803:25: warning: initialized field overwritten [-Woverride-init]
+ 1803 |                 [100] = "High",
+      |                         ^~~~~~
+../src/edge264_headers.c:1803:25: note: (near initialization for 'profile_idc_names[100]')
+../src/edge264_headers.c:1804:25: warning: initialized field overwritten [-Woverride-init]
+ 1804 |                 [110] = "High 10",
+      |                         ^~~~~~~~~
+../src/edge264_headers.c:1804:25: note: (near initialization for 'profile_idc_names[110]')
+../src/edge264_headers.c:1805:25: warning: initialized field overwritten [-Woverride-init]
+ 1805 |                 [118] = "Multiview High",
+      |                         ^~~~~~~~~~~~~~~~
+../src/edge264_headers.c:1805:25: note: (near initialization for 'profile_idc_names[118]')
+../src/edge264_headers.c:1806:25: warning: initialized field overwritten [-Woverride-init]
+ 1806 |                 [122] = "High 4:2:2",
+      |                         ^~~~~~~~~~~~
+../src/edge264_headers.c:1806:25: note: (near initialization for 'profile_idc_names[122]')
+../src/edge264_headers.c:1807:25: warning: initialized field overwritten [-Woverride-init]
+ 1807 |                 [128] = "Stereo High",
+      |                         ^~~~~~~~~~~~~
+../src/edge264_headers.c:1807:25: note: (near initialization for 'profile_idc_names[128]')
+../src/edge264_headers.c:1808:25: warning: initialized field overwritten [-Woverride-init]
+ 1808 |                 [134] = "MFC High",
+      |                         ^~~~~~~~~~
+../src/edge264_headers.c:1808:25: note: (near initialization for 'profile_idc_names[134]')
+../src/edge264_headers.c:1809:25: warning: initialized field overwritten [-Woverride-init]
+ 1809 |                 [135] = "MFC Depth High",
+      |                         ^~~~~~~~~~~~~~~~
+../src/edge264_headers.c:1809:25: note: (near initialization for 'profile_idc_names[135]')
+../src/edge264_headers.c:1810:25: warning: initialized field overwritten [-Woverride-init]
+ 1810 |                 [138] = "Multiview Depth High",
+      |                         ^~~~~~~~~~~~~~~~~~~~~~
+../src/edge264_headers.c:1810:25: note: (near initialization for 'profile_idc_names[138]')
+../src/edge264_headers.c:1811:25: warning: initialized field overwritten [-Woverride-init]
+ 1811 |                 [139] = "Enhanced Multiview Depth High",
+      |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../src/edge264_headers.c:1811:25: note: (near initialization for 'profile_idc_names[139]')
+../src/edge264_headers.c:1812:25: warning: initialized field overwritten [-Woverride-init]
+ 1812 |                 [244] = "High 4:4:4 Predictive",
+      |                         ^~~~~~~~~~~~~~~~~~~~~~~
+../src/edge264_headers.c:1812:25: note: (near initialization for 'profile_idc_names[244]')
+../src/edge264_headers.c:1864:31: error: 'ENOTSUP' undeclared (first use in this function)
+ 1864 |                         ret = ENOTSUP;
+      |                               ^~~~~~~
+../src/edge264_headers.c:1946:40: warning: comparison between types '__vector(16) signed char' and 'u8x16' {aka '__vector(16) unsigned char'} [-Wsign-compare]
+ 1946 |         if (movemask(set8(profile_idc) == ((u8x16){44, 86, 100, 110, 122, 244})) &&
+      |                                        ^~
+../src/edge264_internal.h:724:47: note: in definition of macro 'movemask'
+  724 |         #define movemask(a) _mm_movemask_epi8(a)
+      |                                               ^
+../src/edge264_headers.c:1997:62: warning: suggest parentheses around '&&' within '||' [-Wparentheses]
+ 1997 |                 if (profile_idc != 118 && profile_idc != 128 && profile_idc != 134 ||
+      |                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~
+../src/edge264_headers.c:2007:23: error: 'EBADMSG' undeclared (first use in this function); did you mean 'EBADF'?
+ 2007 |                 ret = EBADMSG;
+      |                       ^~~~~~~
+      |                       EBADF
+../src/edge264_headers.c:2034:40: error: 'ENOBUFS' undeclared (first use in this function); did you mean 'EROFS'?
+ 2034 |                                 return ENOBUFS; // SPS should be reparsed after clearing frames, so we don't print it yet
+      |                                        ^~~~~~~
+      |                                        EROFS
+../src/edge264_headers.c:1935:13: warning: unused variable 'gaps_in_frame_num_value_allowed_flag' [-Wunused-variable]
+ 1935 |         int gaps_in_frame_num_value_allowed_flag = get_u1(&dec->gb);
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../src/edge264_headers.c:1814:35: warning: unused variable 'chroma_format_idc_names' [-Wunused-variable]
+ 1814 |         static const char * const chroma_format_idc_names[4] = {"4:0:0", "4:2:0", "4:2:2", "4:4:4"};
+      |                                   ^~~~~~~~~~~~~~~~~~~~~~~
+../src/edge264_headers.c:1795:35: warning: unused variable 'profile_idc_names' [-Wunused-variable]
+ 1795 |         static const char * const profile_idc_names[256] = {
+      |                                   ^~~~~~~~~~~~~~~~~
+../src/edge264_headers.c:1793:78: warning: unused parameter 'unref_cb' [-Wunused-parameter]
+ 1793 | int ADD_VARIANT(parse_seq_parameter_set)(Edge264Decoder *dec, Edge264UnrefCb unref_cb, void *unref_arg)
+      |                                                               ~~~~~~~~~~~~~~~^~~~~~~~
+../src/edge264_headers.c:1793:94: warning: unused parameter 'unref_arg' [-Wunused-parameter]
+ 1793 | int ADD_VARIANT(parse_seq_parameter_set)(Edge264Decoder *dec, Edge264UnrefCb unref_cb, void *unref_arg)
+      |                                                                                        ~~~~~~^~~~~~~~~
+../src/edge264.c: In function 'internal_alloc':
+../src/edge264.c:124:20: error: implicit declaration of function 'aligned_alloc' [-Wimplicit-function-declaration]
+  124 |         *samples = aligned_alloc(16, samples_size + mbs_size);
+      |                    ^~~~~~~~~~~~~
+../src/edge264.c:84:1: note: include '<stdlib.h>' or provide a declaration of 'aligned_alloc'
+   83 | #include "edge264_headers.c"
+  +++ |+#include <stdlib.h>
+   84 | 
+../src/edge264.c:124:20: warning: incompatible implicit declaration of built-in function 'aligned_alloc' [-Wbuiltin-declaration-mismatch]
+  124 |         *samples = aligned_alloc(16, samples_size + mbs_size);
+      |                    ^~~~~~~~~~~~~
+../src/edge264.c:124:20: note: include '<stdlib.h>' or provide a declaration of 'aligned_alloc'
+../src/edge264.c:123:102: warning: unused parameter 'errno_on_fail' [-Wunused-parameter]
+  123 | static void internal_alloc(void **samples, unsigned samples_size, void **mbs, unsigned mbs_size, int errno_on_fail, void *alloc_arg) {
+      |                                                                                                  ~~~~^~~~~~~~~~~~~
+../src/edge264.c:123:123: warning: unused parameter 'alloc_arg' [-Wunused-parameter]
+  123 | static void internal_alloc(void **samples, unsigned samples_size, void **mbs, unsigned mbs_size, int errno_on_fail, void *alloc_arg) {
+      |                                                                                                                     ~~~~~~^~~~~~~~~
+../src/edge264.c: In function 'internal_free':
+../src/edge264.c:128:48: warning: unused parameter 'mbs' [-Wunused-parameter]
+  128 | static void internal_free(void *samples, void *mbs, void *alloc_arg) {
+      |                                          ~~~~~~^~~
+../src/edge264.c:128:59: warning: unused parameter 'alloc_arg' [-Wunused-parameter]
+  128 | static void internal_free(void *samples, void *mbs, void *alloc_arg) {
+      |                                                     ~~~~~~^~~~~~~~~
+../src/edge264.c: In function 'ignore_NAL':
+../src/edge264.c:132:39: warning: unused parameter 'dec' [-Wunused-parameter]
+  132 | static int ignore_NAL(Edge264Decoder *dec, Edge264UnrefCb unref_cb, void *unref_arg) {
+      |                       ~~~~~~~~~~~~~~~~^~~
+../src/edge264.c:132:59: warning: unused parameter 'unref_cb' [-Wunused-parameter]
+  132 | static int ignore_NAL(Edge264Decoder *dec, Edge264UnrefCb unref_cb, void *unref_arg) {
+      |                                            ~~~~~~~~~~~~~~~^~~~~~~~
+../src/edge264.c:132:75: warning: unused parameter 'unref_arg' [-Wunused-parameter]
+  132 | static int ignore_NAL(Edge264Decoder *dec, Edge264UnrefCb unref_cb, void *unref_arg) {
+      |                                                                     ~~~~~~^~~~~~~~~
+../src/edge264.c: In function 'unsup_NAL':
+../src/edge264.c:137:16: error: 'ENOTSUP' undeclared (first use in this function)
+  137 |         return ENOTSUP;
+      |                ^~~~~~~
+../src/edge264.c:136:38: warning: unused parameter 'dec' [-Wunused-parameter]
+  136 | static int unsup_NAL(Edge264Decoder *dec, Edge264UnrefCb unref_cb, void *unref_arg) {
+      |                      ~~~~~~~~~~~~~~~~^~~
+../src/edge264.c:136:58: warning: unused parameter 'unref_cb' [-Wunused-parameter]
+  136 | static int unsup_NAL(Edge264Decoder *dec, Edge264UnrefCb unref_cb, void *unref_arg) {
+      |                                           ~~~~~~~~~~~~~~~^~~~~~~~
+../src/edge264.c:136:74: warning: unused parameter 'unref_arg' [-Wunused-parameter]
+  136 | static int unsup_NAL(Edge264Decoder *dec, Edge264UnrefCb unref_cb, void *unref_arg) {
+      |                                                                    ~~~~~~^~~~~~~~~
+../src/edge264.c: In function 'edge264_alloc':
+../src/edge264.c:143:31: warning: incompatible implicit declaration of built-in function 'aligned_alloc' [-Wbuiltin-declaration-mismatch]
+  143 |         Edge264Decoder *dec = aligned_alloc(64, sizeof(*dec)); // maximal SIMD type alignment used in edge264
+      |                               ^~~~~~~~~~~~~
+../src/edge264.c:143:31: note: include '<stdlib.h>' or provide a declaration of 'aligned_alloc'
+../src/edge264.c:227:38: error: implicit declaration of function 'sysconf'; did you mean 'sscanf'? [-Wimplicit-function-declaration]
+  227 |                         int n_cpus = sysconf(_SC_NPROCESSORS_ONLN);
+      |                                      ^~~~~~~
+      |                                      sscanf
+../src/edge264.c:227:46: error: '_SC_NPROCESSORS_ONLN' undeclared (first use in this function)
+  227 |                         int n_cpus = sysconf(_SC_NPROCESSORS_ONLN);
+      |                                              ^~~~~~~~~~~~~~~~~~~~
+../src/edge264.c:235:13: error: implicit declaration of function 'pthread_mutex_init' [-Wimplicit-function-declaration]
+  235 |         if (pthread_mutex_init(&dec->lock, NULL) == 0) {
+      |             ^~~~~~~~~~~~~~~~~~
+../src/edge264.c:236:21: error: implicit declaration of function 'pthread_cond_init' [-Wimplicit-function-declaration]
+  236 |                 if (pthread_cond_init(&dec->task_ready, NULL) == 0) {
+      |                     ^~~~~~~~~~~~~~~~~
+../src/edge264.c:240:65: error: implicit declaration of function 'pthread_create' [-Wimplicit-function-declaration]
+  240 |                                         while (i < n_threads && pthread_create(&dec->threads[i], NULL, dec->worker_loop, (void *)((uintptr_t)dec + i)) == 0)
+      |                                                                 ^~~~~~~~~~~~~~
+../src/edge264.c:246:49: error: implicit declaration of function 'pthread_cancel' [-Wimplicit-function-declaration]
+  246 |                                                 pthread_cancel(dec->threads[i]);
+      |                                                 ^~~~~~~~~~~~~~
+../src/edge264.c:247:41: error: implicit declaration of function 'pthread_cond_destroy' [-Wimplicit-function-declaration]
+  247 |                                         pthread_cond_destroy(&dec->task_complete);
+      |                                         ^~~~~~~~~~~~~~~~~~~~
+../src/edge264.c:253:17: error: implicit declaration of function 'pthread_mutex_destroy' [-Wimplicit-function-declaration]
+  253 |                 pthread_mutex_destroy(&dec->lock);
+      |                 ^~~~~~~~~~~~~~~~~~~~~
+../src/edge264.c:142:86: warning: unused parameter 'log_mbs' [-Wunused-parameter]
+  142 | Edge264Decoder *edge264_alloc(int n_threads, Edge264LogCb log_cb, void *log_arg, int log_mbs, Edge264AllocCb alloc_cb, Edge264FreeCb free_cb, void *alloc_arg) {
+      |                                                                                  ~~~~^~~~~~~
+../src/edge264.c: In function 'edge264_decode_NAL':
+../src/edge264.c:305:23: warning: initialized field overwritten [-Woverride-init]
+  305 |                 [1] = "Coded slice of a non-IDR picture",
+      |                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../src/edge264.c:305:23: note: (near initialization for 'nal_unit_type_names[1]')
+../src/edge264.c:306:23: warning: initialized field overwritten [-Woverride-init]
+  306 |                 [2] = "Coded slice data partition A",
+      |                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../src/edge264.c:306:23: note: (near initialization for 'nal_unit_type_names[2]')
+../src/edge264.c:307:23: warning: initialized field overwritten [-Woverride-init]
+  307 |                 [3] = "Coded slice data partition B",
+      |                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../src/edge264.c:307:23: note: (near initialization for 'nal_unit_type_names[3]')
+../src/edge264.c:308:23: warning: initialized field overwritten [-Woverride-init]
+  308 |                 [4] = "Coded slice data partition C",
+      |                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../src/edge264.c:308:23: note: (near initialization for 'nal_unit_type_names[4]')
+../src/edge264.c:309:23: warning: initialized field overwritten [-Woverride-init]
+  309 |                 [5] = "Coded slice of an IDR picture",
+      |                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../src/edge264.c:309:23: note: (near initialization for 'nal_unit_type_names[5]')
+../src/edge264.c:310:23: warning: initialized field overwritten [-Woverride-init]
+  310 |                 [6] = "Supplemental enhancement information (SEI)",
+      |                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../src/edge264.c:310:23: note: (near initialization for 'nal_unit_type_names[6]')
+../src/edge264.c:311:23: warning: initialized field overwritten [-Woverride-init]
+  311 |                 [7] = "Sequence parameter set",
+      |                       ^~~~~~~~~~~~~~~~~~~~~~~~
+../src/edge264.c:311:23: note: (near initialization for 'nal_unit_type_names[7]')
+../src/edge264.c:312:23: warning: initialized field overwritten [-Woverride-init]
+  312 |                 [8] = "Picture parameter set",
+      |                       ^~~~~~~~~~~~~~~~~~~~~~~
+../src/edge264.c:312:23: note: (near initialization for 'nal_unit_type_names[8]')
+../src/edge264.c:313:23: warning: initialized field overwritten [-Woverride-init]
+  313 |                 [9] = "Access unit delimiter",
+      |                       ^~~~~~~~~~~~~~~~~~~~~~~
+../src/edge264.c:313:23: note: (near initialization for 'nal_unit_type_names[9]')
+../src/edge264.c:314:24: warning: initialized field overwritten [-Woverride-init]
+  314 |                 [10] = "End of sequence",
+      |                        ^~~~~~~~~~~~~~~~~
+../src/edge264.c:314:24: note: (near initialization for 'nal_unit_type_names[10]')
+../src/edge264.c:315:24: warning: initialized field overwritten [-Woverride-init]
+  315 |                 [11] = "End of stream",
+      |                        ^~~~~~~~~~~~~~~
+../src/edge264.c:315:24: note: (near initialization for 'nal_unit_type_names[11]')
+../src/edge264.c:316:24: warning: initialized field overwritten [-Woverride-init]
+  316 |                 [12] = "Filler data",
+      |                        ^~~~~~~~~~~~~
+../src/edge264.c:316:24: note: (near initialization for 'nal_unit_type_names[12]')
+../src/edge264.c:317:24: warning: initialized field overwritten [-Woverride-init]
+  317 |                 [13] = "Sequence parameter set extension",
+      |                        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../src/edge264.c:317:24: note: (near initialization for 'nal_unit_type_names[13]')
+../src/edge264.c:318:24: warning: initialized field overwritten [-Woverride-init]
+  318 |                 [14] = "Prefix NAL unit",
+      |                        ^~~~~~~~~~~~~~~~~
+../src/edge264.c:318:24: note: (near initialization for 'nal_unit_type_names[14]')
+../src/edge264.c:319:24: warning: initialized field overwritten [-Woverride-init]
+  319 |                 [15] = "Subset sequence parameter set",
+      |                        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../src/edge264.c:319:24: note: (near initialization for 'nal_unit_type_names[15]')
+../src/edge264.c:320:24: warning: initialized field overwritten [-Woverride-init]
+  320 |                 [16] = "Depth parameter set",
+      |                        ^~~~~~~~~~~~~~~~~~~~~
+../src/edge264.c:320:24: note: (near initialization for 'nal_unit_type_names[16]')
+../src/edge264.c:321:24: warning: initialized field overwritten [-Woverride-init]
+  321 |                 [19] = "Coded slice of an auxiliary coded picture without partitioning",
+      |                        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../src/edge264.c:321:24: note: (near initialization for 'nal_unit_type_names[19]')
+../src/edge264.c:322:24: warning: initialized field overwritten [-Woverride-init]
+  322 |                 [20] = "Coded slice extension",
+      |                        ^~~~~~~~~~~~~~~~~~~~~~~
+../src/edge264.c:322:24: note: (near initialization for 'nal_unit_type_names[20]')
+../src/edge264.c:323:24: warning: initialized field overwritten [-Woverride-init]
+  323 |                 [21] = "Coded slice extension for a depth view component or a 3D-AVC texture view component",
+      |                        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../src/edge264.c:323:24: note: (near initialization for 'nal_unit_type_names[21]')
+../src/edge264.c:339:24: error: 'ENOBUFS' undeclared (first use in this function); did you mean 'EROFS'?
+  339 |                 return ENOBUFS;
+      |                        ^~~~~~~
+      |                        EROFS
+../src/edge264.c:347:31: error: 'ENODATA' undeclared (first use in this function)
+  347 |                 return ret ?: ENODATA;
+      |                               ^~~~~~~
+../src/edge264.c: In function 'edge264_get_frame':
+../src/edge264.c:397:31: error: 'ENOMSG' undeclared (first use in this function); did you mean 'ENOMEM'?
+  397 |         int pic0, pic1, res = ENOMSG;
+      |                               ^~~~~~
+      |                               ENOMEM
+../src/edge264_internal.h: At top level:
+../src/edge264_internal.h:819:30: warning: 'shufflez' defined but not used [-Wunused-function]
+  819 |                 static i8x16 shufflez(i8x16 a, i8x16 m) {return shuffle(a, m) & ~(0 > m);}
+      |                              ^~~~~~~~
+make: *** [Makefile:23: edge264.o] Error 1
