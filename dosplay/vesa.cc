@@ -7,6 +7,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <emmintrin.h>
 
 #define DOS_MEM_BASE 0x0
 #define VESA_INFO_PTR 0x2000 // use a small buffer in conventional memory (e.g. at 0x2000)
@@ -115,8 +116,32 @@ void vesa_restore_text_mode() {
 }
 
 void vesa_wait_vsync() {
-    while (inportb(0x3DA) & 8);
-    while (!(inportb(0x3DA) & 8));
+    int timeout = 1000000;
+    while ((inportb(0x3DA) & 8) && timeout-- > 0);
+    timeout = 1000000;
+    while (!(inportb(0x3DA) & 8) && timeout-- > 0);
+}
+
+static void memcpy_wc(void *dst, const void *src, size_t len) {
+    uint8_t *d = (uint8_t*)dst;
+    const uint8_t *s = (const uint8_t*)src;
+    size_t i = 0;
+    // Align source to 16 bytes for _mm_load_si128, assume both are 16-byte aligned enough
+    // Actually lfb might not be 16-byte aligned, so we use _mm_loadu_si128 for source just in case
+    for (; i + 63 < len; i += 64) {
+        __m128i r0 = _mm_loadu_si128((const __m128i*)(s + i + 0));
+        __m128i r1 = _mm_loadu_si128((const __m128i*)(s + i + 16));
+        __m128i r2 = _mm_loadu_si128((const __m128i*)(s + i + 32));
+        __m128i r3 = _mm_loadu_si128((const __m128i*)(s + i + 48));
+        // Non-temporal stores enforce write-combining internally
+        _mm_stream_si128((__m128i*)(d + i + 0), r0);
+        _mm_stream_si128((__m128i*)(d + i + 16), r1);
+        _mm_stream_si128((__m128i*)(d + i + 32), r2);
+        _mm_stream_si128((__m128i*)(d + i + 48), r3);
+    }
+    for (; i < len; i++) {
+        d[i] = s[i];
+    }
 }
 
 void vesa_draw_yuv420(uint32_t* lfb, 
@@ -171,7 +196,6 @@ void vesa_draw_yuv420(uint32_t* lfb,
             }
         }
     }
-    
     // Fast burst copy to VRAM
-    memcpy(lfb, backbuffer, screen_height * vesa_pitch);
+    memcpy_wc(lfb, backbuffer, screen_height * vesa_pitch);
 }

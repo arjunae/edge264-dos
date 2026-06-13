@@ -17,19 +17,38 @@
 
 int main(int argc, char** argv) {
     if (argc < 2) {
-        printf("Usage: dosplay <video.264> [screen_w] [screen_h]\n");
+        printf("Usage: dosplay <video.264> [screen_w] [screen_h] [--framedrop] [--fps N]\n");
         return 1;
     }
     int screen_w = 1024;
     int screen_h = 768;
-    if (argc >= 4) {
-        screen_w = atoi(argv[2]);
-        screen_h = atoi(argv[3]);
+    int framedrop = 0;
+    int fps_limit = 30;
+    char *video_file = NULL;
+
+    for (int i = 1; i < argc; i++) {
+        if (strcmp(argv[i], "--framedrop") == 0) {
+            framedrop = 1;
+        } else if (strcmp(argv[i], "--fps") == 0 && i + 1 < argc) {
+            fps_limit = atoi(argv[i+1]);
+            i++;
+        } else if (!video_file) {
+            video_file = argv[i];
+        } else if (screen_w == 1024) {
+            screen_w = atoi(argv[i]);
+        } else {
+            screen_h = atoi(argv[i]);
+        }
     }
 
-    FILE *f = fopen(argv[1], "rb");
+    if (!video_file) {
+        printf("Usage: dosplay <video.264> [screen_w] [screen_h] [--framedrop] [--fps N]\n");
+        return 1;
+    }
+
+    FILE *f = fopen(video_file, "rb");
     if (!f) {
-        printf("Failed to open %s\n", argv[1]);
+        printf("Failed to open %s\n", video_file);
         return 1;
     }
 
@@ -94,11 +113,23 @@ int main(int argc, char** argv) {
         
         while (!edge264_get_frame(dec, &frm, 0)) {
            // vesa_wait_vsync();
-            vesa_draw_yuv420(lfb, frm.samples[0], frm.samples[1], frm.samples[2],
-                             frm.width_Y, frm.height_Y,
-                             frm.stride_Y, frm.stride_C,
-                             screen_w, screen_h);
+            if (framedrop <= 0 || (frames_decoded % (framedrop + 1) == 0)) {
+                vesa_draw_yuv420(lfb, frm.samples[0], frm.samples[1], frm.samples[2],
+                                 frm.width_Y, frm.height_Y,
+                                 frm.stride_Y, frm.stride_C,
+                                 screen_w, screen_h);
+            }
             frames_decoded++;
+            
+            if (fps_limit > 0) {
+                struct timeval now;
+                double target_time = frames_decoded / (double)fps_limit;
+                while (1) {
+                    gettimeofday(&now, NULL);
+                    double elapsed = (now.tv_sec - start_tv.tv_sec) + (now.tv_usec - start_tv.tv_usec) / 1000000.0;
+                    if (elapsed >= target_time) break;
+                }
+            }
         }
 
         if (res != ENOBUFS) {
@@ -114,11 +145,23 @@ int main(int argc, char** argv) {
     res = edge264_decode_NAL(dec, end0, end0, NULL, NULL);
     while (!edge264_get_frame(dec, &frm, 0)) {
         // vesa_wait_vsync();
-        vesa_draw_yuv420(lfb, frm.samples[0], frm.samples[1], frm.samples[2],
-                         frm.width_Y, frm.height_Y,
-                         frm.stride_Y, frm.stride_C,
-                         screen_w, screen_h);
+        if (framedrop <= 0 || (frames_decoded % (framedrop + 1) == 0)) {
+            vesa_draw_yuv420(lfb, frm.samples[0], frm.samples[1], frm.samples[2],
+                             frm.width_Y, frm.height_Y,
+                             frm.stride_Y, frm.stride_C,
+                             screen_w, screen_h);
+        }
         frames_decoded++;
+        
+        if (fps_limit > 0) {
+            struct timeval now;
+            double target_time = frames_decoded / (double)fps_limit;
+            while (1) {
+                gettimeofday(&now, NULL);
+                double elapsed = (now.tv_sec - start_tv.tv_sec) + (now.tv_usec - start_tv.tv_usec) / 1000000.0;
+                if (elapsed >= target_time) break;
+            }
+        }
     }
 
     gettimeofday(&end_tv, NULL);
