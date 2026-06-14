@@ -39,31 +39,55 @@ int vesa_pitch = 0;
 int vesa_bpp = 0;
 uint32_t vesa_phys_base = 0;
 
+// Page-flip state ------------------------------------------------------------
+// 1 = flip during vertical retrace (tear-free, paced by refresh)
+// 0 = flip immediately (uncapped, for benchmarking; may tear at the flip line)
+int vesa_vsync_flip = 1;
+
+static int       g_mode_h  = 0;        // scanlines per page (= mode height)
+static uint8_t  *g_page[2] = {0, 0};   // near pointers to VRAM page 0 / page 1
+static int       g_back    = 1;        // page currently used as back buffer
+
 static int clamp(int val) {
     if (val < 0) return 0;
     if (val > 255) return 255;
     return val;
 }
 
+static void vesa_set_display_start(int page) {
+    __dpmi_regs r;
+    memset(&r, 0, sizeof(r));
+    r.x.ax = 0x4F07;
+    r.h.bh = 0x00;
+    r.h.bl = vesa_vsync_flip ? 0x80 : 0x00; // 0x80 = schedule at vertical retrace
+    r.x.cx = 0;                              // first displayed pixel (x)
+    r.x.dx = page * g_mode_h;                // first displayed scanline (y)
+    __dpmi_int(0x10, &r);
+}
+
+// Show the page we just drew into, then make the other page the new target.
+void vesa_flip(void) {
+    vesa_set_display_start(g_back);
+    g_back ^= 1;
+}
+
+void vesa_set_vsync(int on) {
+    vesa_vsync_flip = on ? 1 : 0;
+}
+
 uint32_t* vesa_init(int req_width, int req_height) {
     if (!__djgpp_nearptr_enable()) return NULL;
 
     __dpmi_regs r;
-    uint16_t best_mode = 0;
-    uint32_t phys_base = 0;
+    uint16_t mode = 0x4118; // 0x118 (1024x768) + LFB bit
 
-    // We use mode 0x118 (1024x768x32 or 24) directly, with LFB bit (0x4000)
-    // 0x4118 for VBE LFB.
-    uint16_t mode = 0x4118;
-
-    // Use DJGPP's standard Transfer Buffer for DOS API communication
     int tb_seg = _go32_info_block.linear_address_of_transfer_buffer >> 4;
     int tb_lin = _go32_info_block.linear_address_of_transfer_buffer;
 
-    // Get mode info just to get physical base address
+    // Query mode info (without LFB bit) to get physbase / pitch / bpp.
     memset(&r, 0, sizeof(r));
     r.x.ax = 0x4F01;
-    r.x.cx = 0x118; // without LFB bit to query
+    r.x.cx = 0x118;
     r.x.es = tb_seg;
     r.x.di = 0;
     __dpmi_int(0x10, &r);
@@ -74,32 +98,57 @@ uint32_t* vesa_init(int req_width, int req_height) {
     }
 
     VbeModeInfo *minfo = (VbeModeInfo *)(tb_lin + __djgpp_conventional_base);
-    phys_base = minfo->physbase;
+    uint32_t phys_base = minfo->physbase;
     vesa_phys_base = phys_base;
     vesa_pitch = minfo->pitch;
     vesa_bpp = minfo->bpp;
+    g_mode_h = minfo->y_res;
 
     if (phys_base == 0) {
         printf("No LFB available for this mode!\n");
         return NULL;
     }
 
-    // Map physical memory (safe size using actual pitch)
+    // Map TWO pages so we can page-flip. Needs >= 2 * pitch * height of VRAM
+    // (6 MB at 1024x768x32) inside the LFB aperture.
+    uint32_t page_bytes = (uint32_t)vesa_pitch * minfo->y_res;
     __dpmi_meminfo mem;
     mem.address = phys_base;
-    mem.size = vesa_pitch * minfo->y_res; 
+    mem.size = page_bytes * 2;
     if (__dpmi_physical_address_mapping(&mem) != 0) {
-        printf("Failed to map LFB!\n");
-        return NULL;
+        // Fall back to a single page (no flipping) if 2 pages can't be mapped.
+        mem.address = phys_base;
+        mem.size = page_bytes;
+        if (__dpmi_physical_address_mapping(&mem) != 0) {
+            printf("Failed to map LFB!\n");
+            return NULL;
+        }
+        uint8_t *base1 = (uint8_t *)(mem.address + __djgpp_conventional_base);
+        g_page[0] = base1;
+        g_page[1] = base1;   // both point at the same page -> flip is a no-op
+    } else {
+        uint8_t *base = (uint8_t *)(mem.address + __djgpp_conventional_base);
+        g_page[0] = base;
+        g_page[1] = base + page_bytes;
+        // clear both pages so the very first flip never shows VRAM garbage
+        memset(g_page[0], 0, page_bytes);
+        memset(g_page[1], 0, page_bytes);
     }
 
-    // Set mode
+    // Set the graphics mode.
     memset(&r, 0, sizeof(r));
     r.x.ax = 0x4F02;
     r.x.bx = mode;
     __dpmi_int(0x10, &r);
 
-    return (uint32_t *)(mem.address + __djgpp_conventional_base);
+    // Display page 0; draw into page 1 first.
+    g_back = 1;
+    int saved = vesa_vsync_flip;
+    vesa_vsync_flip = 0;           // don't wait for retrace during init
+    vesa_set_display_start(0);
+    vesa_vsync_flip = saved;
+
+    return (uint32_t *)g_page[0];
 }
 
 #include <conio.h>
@@ -109,7 +158,7 @@ void vesa_restore_text_mode() {
     memset(&r, 0, sizeof(r));
     r.x.ax = 0x0003;
     __dpmi_int(0x10, &r);
-    
+
     // Fallback/Reinforcement using conio.h
     textmode(C80);
     clrscr();
@@ -126,8 +175,6 @@ static void memcpy_wc(void *dst, const void *src, size_t len) {
     uint8_t *d = (uint8_t*)dst;
     const uint8_t *s = (const uint8_t*)src;
     size_t i = 0;
-    // Align source to 16 bytes for _mm_load_si128, assume both are 16-byte aligned enough
-    // Actually lfb might not be 16-byte aligned, so we use _mm_loadu_si128 for source just in case
     for (; i + 63 < len; i += 64) {
         __m128i r0 = _mm_loadu_si128((const __m128i*)(s + i + 0));
         __m128i r1 = _mm_loadu_si128((const __m128i*)(s + i + 16));
@@ -142,21 +189,27 @@ static void memcpy_wc(void *dst, const void *src, size_t len) {
     for (; i < len; i++) {
         d[i] = s[i];
     }
+    // Streaming stores are weakly ordered: make the whole blit globally visible
+    // BEFORE we flip the display start to this page.
+    _mm_sfence();
 }
 
-void vesa_draw_yuv420(uint32_t* lfb, 
+void vesa_draw_yuv420(uint32_t* lfb,
                       const uint8_t* y_ptr, const uint8_t* u_ptr, const uint8_t* v_ptr,
                       int pic_width, int pic_height,
                       int stride_y, int stride_c,
-                      int screen_width, int screen_height) 
+                      int screen_width, int screen_height)
 {
+    (void)lfb; // target page is chosen internally for double buffering
+
     // Simple top-left aligned mapping
     int w = pic_width < screen_width ? pic_width : screen_width;
     int h = pic_height < screen_height ? pic_height : screen_height;
 
+    // Render into a cached system-RAM backbuffer (fast), then burst to VRAM.
     static uint32_t* backbuffer = NULL;
     if (!backbuffer) {
-        backbuffer = (uint32_t*)malloc(screen_width * screen_height * 4);
+        backbuffer = (uint32_t*)malloc((size_t)vesa_pitch * screen_height);
     }
 
     for (int y = 0; y < h; y++) {
@@ -196,6 +249,8 @@ void vesa_draw_yuv420(uint32_t* lfb,
             }
         }
     }
-    // Fast burst copy to VRAM
-    memcpy_wc(lfb, backbuffer, screen_height * vesa_pitch);
+
+    // Burst-copy into the hidden VRAM page, then flip it on screen.
+    memcpy_wc(g_page[g_back], backbuffer, (size_t)screen_height * vesa_pitch);
+    vesa_flip();
 }
