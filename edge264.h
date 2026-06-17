@@ -31,6 +31,21 @@
 #include <errno.h>
 #include <stdint.h>
 
+#if defined(__DJGPP__) || defined(__MSDOS__)
+    #include <malloc.h>
+    
+    /* C11 aligned_alloc auf DJGPPs memalign umbiegen */
+    #ifndef aligned_alloc
+        #define aligned_alloc(alignment, size) memalign((alignment), (size))
+    #endif
+
+    /* CPU-Abfrage für DOS blind auf 1 Kern setzen */
+    #ifndef _SC_NPROCESSORS_ONLN
+        #define _SC_NPROCESSORS_ONLN 1
+        #define sysconf(x) 1
+    #endif
+#endif
+
 #ifdef __cplusplus
 extern "C" {
 #endif

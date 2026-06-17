@@ -3,7 +3,8 @@
 # Generated with AI assistance by Claude Sonnet 4.6 (claude-sonnet-4-6).
 #
 # Supported targets: macOS (macos), Linux (linux), Windows MinGW (windows),
-#                    WebAssembly (wasm), Android NDK (android), iOS (ios)
+#                    WebAssembly (wasm), Android NDK (android), iOS (ios),
+#                    DOS / DJGPP (dos)
 #
 # Optional parameters (all can be overridden on the command line):
 #
@@ -18,7 +19,7 @@
 #                 cross-compilation use the NDK's llvm-ar to avoid host/target
 #                 mismatch, e.g. AR=$NDK/.../llvm-ar)
 #   OS          — target operating system (default: host OS)
-#                 accepted values: macos  linux  windows  wasm  android  ios
+#                 accepted values: macos  linux  windows  wasm  android  ios  dos
 #   VARIANTS    — comma-separated build variants, from:
 #                   x86-64-v2  → build an extra edge264_headers object with
 #                                -march=x86-64-v2 for runtime dispatch (SSE4.1)
@@ -33,7 +34,7 @@
 #   SANITIZE    — comma-separated sanitizer list passed directly to -fsanitize=,
 #                 e.g. SANITIZE=address,undefined  (default: empty)
 #   STATIC      — produce a static library (.a) instead of shared: yes|no
-#                 (default: no; always forced to yes for iOS)
+#                 (default: no; always forced to yes for iOS and DOS)
 #   PREFIX      — installation prefix (default: /usr/local)
 #   libdir      — library installation directory (default: $(PREFIX)/lib)
 #   includedir  — header installation directory (default: $(PREFIX)/include)
@@ -80,15 +81,30 @@ HOST_OS   := $(strip \
 # ---- Target OS ---------------------------------------------------------------
 # Defaults to the host; can be overridden for cross-compilation.
 OS ?= $(HOST_OS)
-ifeq (,$(findstring $(OS),macos linux windows wasm android ios))
-  $(error OS=$(OS) is invalid. Accepted values: macos  linux  windows  wasm  android  ios)
+ifeq (,$(findstring $(OS),macos linux windows wasm android ios dos))
+  $(error OS=$(OS) is invalid. Accepted values: macos  linux  windows  wasm  android  ios  dos)
 endif
 
 # ---- Compiler / linker selection ---------------------------------------------
 # CC is used for all object file compilation.
 ifeq ($(OS),ios)
-  # xcrun selects the right clang from the active Xcode installation
-  CC ?= $(shell xcrun --sdk iphoneos --find clang 2>/dev/null || echo clang)
+  # xcrun selects the right clang from the active Xcode installation.
+  # NOTE: CC is one of Make's built-in implicit-rule variables, pre-set to
+  # "cc" with origin "default" — a plain "?=" silently ignores that and would
+  # never take effect, so we check the origin explicitly. This still lets an
+  # explicit `make CC=...` on the command line win, since that origin is
+  # "command line", not "default".
+  ifeq ($(origin CC),default)
+    CC := $(shell xcrun --sdk iphoneos --find clang 2>/dev/null || echo clang)
+  endif
+else ifeq ($(OS),dos)
+  # DJGPP cross-toolchain (https://www.delorie.com/djgpp/): tool binaries are
+  # namespaced with the target triplet "i586-pc-msdosdjgpp-". This is unrelated
+  # to the PREFIX install-path variable further below — same English word,
+  # two different concepts (toolchain triplet vs. installation directory).
+  ifeq ($(origin CC),default)
+    CC := i586-pc-msdosdjgpp-gcc
+  endif
 else ifneq ($(OS),wasm)
   CC ?= cc
 endif
@@ -102,7 +118,14 @@ CCLD ?= $(CC)
 # AR is used for static builds. Android NDK ships llvm-ar alongside its clang;
 # using the host ar against NDK objects can silently produce a corrupt archive.
 ifeq ($(OS),android)
-  AR ?= llvm-ar
+  # AR defaults to "ar" with origin "default" (see CC note above); same fix.
+  ifeq ($(origin AR),default)
+    AR := llvm-ar
+  endif
+else ifeq ($(OS),dos)
+  ifeq ($(origin AR),default)
+    AR := i586-pc-msdosdjgpp-ar
+  endif
 endif
 
 # ---- User parameters ---------------------------------------------------------
@@ -117,8 +140,11 @@ BUILDTEST  ?= yes
 V          ?= yes
 PY         ?= python3
 
-# iOS is always a static build
+# iOS and DOS are always static builds: iOS requires signed frameworks instead
+# of bare dylibs, and DJGPP/DOS has no shared-library loader.
 ifeq ($(OS),ios)
+  override STATIC := yes
+else ifeq ($(OS),dos)
   override STATIC := yes
 endif
 
@@ -128,7 +154,7 @@ HAS_V3   := $(findstring x86-64-v3,$(VARIANTS))
 HAS_LOGS := $(findstring logs,$(VARIANTS))
 
 # x86 variants are meaningless on non-x86 targets
-ifneq (,$(findstring $(OS),wasm android ios))
+ifneq (,$(findstring $(OS),wasm android ios dos))
   ifneq ($(HAS_V2)$(HAS_V3),)
     $(warning WARNING: x86-64-v2/v3 variants are ignored for OS=$(OS))
     HAS_V2 :=
@@ -156,6 +182,11 @@ else ifeq ($(OS),android)
 else ifeq ($(OS),ios)
   # iOS requires static libraries or signed .xcframework bundles
   LIBNAME := libedge264.a
+else ifeq ($(OS),dos)
+  # DJGPP has no shared-library loader (STATIC is forced to yes above); the
+  # linked executable is a COFF binary wrapped in a DOS stub, hence .exe.
+  LIBNAME := libedge264.a
+  EXE := .exe
 else ifeq ($(OS),wasm)
   # emcc produces a .js glue file alongside a .wasm binary
   LIBNAME := edge264.js
@@ -207,6 +238,12 @@ else ifeq ($(OS),ios)
   # arm64 is the only live iOS architecture; xcrun resolves the sysroot.
   _IOS_SDK   := $(shell xcrun --sdk iphoneos --show-sdk-path 2>/dev/null)
   _BASE_ARCH := -arch arm64 $(if $(_IOS_SDK),-isysroot $(_IOS_SDK))
+else ifeq ($(OS),dos)
+  # i586-pc-msdosdjgpp-gcc already targets the right baseline via its triple;
+  # -march=native would describe the host CPU rather than the DOS target, and
+  # SSE/AVX register state is not safely preserved across real-mode DOS/BIOS
+  # calls, so no ISA flag is injected automatically here.
+  _BASE_ARCH :=
 else ifeq ($(OS),wasm)
   # emcc does not support -march=native; WASM SIMD is enabled with -msimd128.
   _BASE_ARCH := -msimd128 -mrelaxed-simd
@@ -458,6 +495,7 @@ help:
 	@echo "  make SANITIZE=address,undefined"
 	@echo "  make STATIC=yes"
 	@echo "  make OS=wasm VARIANTS=logs BUILDTEST=no"
+	@echo "  make OS=dos"
 	@echo "  make install PREFIX=\$$HOME/.local"
 	@echo "  make install libdir=/usr/lib64"
 	@echo "  make CPPFLAGS=-DNDEBUG LDFLAGS='-Wl,-z,relro -Wl,-z,now'"

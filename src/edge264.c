@@ -229,6 +229,10 @@ Edge264Decoder *edge264_alloc(int n_threads, Edge264LogCb log_cb, void *log_arg,
 		n_threads = min(n_cpus, 16);
 	}
 	
+	#if defined(__DJGPP__) || defined(__MSDOS__)
+		n_threads = 0;     
+	#endif
+	
 	// if multithreading is disabled we are done, otherwise initialize all
 	if (n_threads == 0)
 		return dec;

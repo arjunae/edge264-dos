@@ -7,9 +7,10 @@
 
 #include <assert.h>
 #include <limits.h>
-#ifndef DOS_CORE
-	#include <pthread.h>
+#if defined(__DJGPP__) || defined(__MSDOS__)
+	#include "../pthread.h"
 #endif
+
 #include <stddef.h>
 #include <stdint.h>
 #include <stdio.h>
@@ -21,11 +22,40 @@
 	#include <processthreadsapi.h>
 	#define ssize_t ptrdiff_t
 #else
-	#ifndef DOS_CORE
-		#include <unistd.h>
+	#include <unistd.h>
+	#if !defined(__DJGPP__) || !defined(__MSDOS__)
 		#include <sys/resource.h>
 	#endif
 #endif
+#if SIMD == SSE
+	#include <immintrin.h>
+#elif SIMD == NEON
+	#include <arm_neon.h>
+#elif SIMD == WASM
+	#include <wasm_simd128.h>
+#endif
+
+#if defined(__DJGPP__) || defined(__MSDOS__)
+    #ifndef ENOBUFS
+        #define ENOBUFS 105
+    #endif
+    #ifndef ENOTSUP
+        #define ENOTSUP 134
+    #endif
+    #ifndef EBADMSG
+        #define EBADMSG 74
+    #endif
+    #ifndef ENODATA
+        #define ENODATA 61
+    #endif
+    #ifndef ENOMSG
+        #define ENOMSG 42
+    #endif
+#endif
+
+#include "../edge264.h"
+
+
 
 // Automatic selection of SIMD backend if not defined by environment
 #define SSE 1
@@ -45,16 +75,6 @@
 		#error "No supported vector intrinsics found (SSE, NEON, WASM, clang)"
 	#endif
 #endif
-#if SIMD == SSE
-	#include <immintrin.h>
-#elif SIMD == NEON
-	#include <arm_neon.h>
-#elif SIMD == WASM
-	#include <wasm_simd128.h>
-#endif
-
-#include "../edge264.h"
-
 
 
 typedef int8_t i8x4 __attribute__((vector_size(4)));
@@ -1192,19 +1212,15 @@ static always_inline unsigned depended_frames(Edge264Decoder *dec) {
 	return c[0];
 }
 // relative time with microsecond precision
-static always_inline uint64_t get_relative_time_us() {
-	#ifdef _WIN32
-		uint64_t ticks, frequency;
-		QueryPerformanceFrequency(&frequency);
-		QueryPerformanceCounter(&ticks);
-		return ticks * 1000000 / frequency; // could be optimized with mul+shift but not critical
-	#else
-		struct timespec tp;
-		clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &tp);
-		return (uint64_t)tp.tv_sec * 1000000 + tp.tv_nsec / 1000;
-	#endif
+static inline int64_t get_relative_time_us(void) {
+#if defined(__DJGPP__) || defined(__MSDOS__)
+    return (int64_t)clock() * 1000000 / CLOCKS_PER_SEC;
+#else
+    struct timespec tp;
+    clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &tp);
+    return (int64_t)tp.tv_sec * 1000000 + tp.tv_nsec / 1000;
+#endif
 }
-
 
 
 /**

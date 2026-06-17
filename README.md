@@ -37,7 +37,7 @@ Below is an overview of optional features versus Baseline (**BP**), Extended (**
 
 # Platforms
 
-Target system support currently includes **macOS**, **Linux**, **Windows** and **WebAssembly**.
+Target system support currently includes **macOS**, **Linux**, **Windows** , **WebAssembly** and **DOS**
 
 Processor support depends on the compiler used (GNU GCC or LLVM Clang). edge264 can choose among 4 backends, the last one supporting every other little-endian CPU by relying on [Clang vector extensions](https://clang.llvm.org/docs/LanguageExtensions.html#vectors-and-extended-vectors).
 
@@ -60,6 +60,12 @@ For WebAssembly builds:
 ```sh
 emmake make OS=wasm
 ```
+
+For DOS Builds
+```
+make OS=dos BUILDTEST=no CFLAGS="-msse2 -pthread" 
+```
+You will need a pthread enabled [DJGPP](https://sourceforge.net/projects/pthread-djgpp/files/djgpp-builder-v2.0/)
 
 You can find lists of targets and options and what they do in the [Makefile](Makefile).
 
